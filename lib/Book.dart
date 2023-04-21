@@ -231,11 +231,8 @@ class _BookState extends State<Book> {
                   color: Colors.black,
                   iconSize: 33,
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                Appointment(appointmentData)));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Settings()));
                   },
                 )
               ],
@@ -256,6 +253,9 @@ class _BookState extends State<Book> {
                     ),
                   ),
                   Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                     margin: EdgeInsets.all(5),
                     color: Colors.white,
                     child: Row(
@@ -329,9 +329,13 @@ class _BookState extends State<Book> {
                           ),
                         ),
                         Container(
+                          decoration: BoxDecoration(
+                              color: Color(0xFFFD5722),
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(8),
+                                  bottomRight: Radius.circular(8))),
                           height: 110,
                           width: 63,
-                          color: Color(0xFFFD5722),
                           child: Icon(
                             Icons.punch_clock,
                             color: Colors.white,
@@ -362,6 +366,9 @@ class _BookState extends State<Book> {
                       ;
                     },
                     child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       margin: EdgeInsets.all(5),
                       color: Colors.white,
                       // shadowColor: Colors.white,
@@ -402,9 +409,13 @@ class _BookState extends State<Book> {
                             ),
                           ),
                           Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFD5722),
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(8),
+                                    bottomRight: Radius.circular(8))),
                             height: 110,
                             width: 63,
-                            color: Color(0xFFFD5722),
                             child: Icon(
                               Icons.punch_clock,
                               color: Colors.white,
@@ -424,7 +435,10 @@ class _BookState extends State<Book> {
                       _navigateNameAndGenderSelaction(context);
                     },
                     child: Card(
-                      margin: EdgeInsets.all(5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      margin: EdgeInsets.only(left: 5, right: 5, top: 5),
                       color: Colors.white,
                       shadowColor: Colors.white,
                       // shape: RoundedRectangleBorder(
@@ -455,9 +469,13 @@ class _BookState extends State<Book> {
                             ),
                           ),
                           Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xFFFD5722),
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(8),
+                                    bottomRight: Radius.circular(8))),
                             height: 110,
                             width: 63,
-                            color: Color(0xFFFD5722),
                             child: Icon(
                               Icons.person,
                               color: Colors.white,
@@ -486,14 +504,26 @@ class _BookState extends State<Book> {
                           width: 10,
                         ),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              displayDate = 'Select Appointment Date';
+                              displayTimeSlot = '';
+                              displaytimingId = '';
+                              displayPatientName = 'Select Patient';
+                              displayBirthDate = '';
+                              displayGender = '';
+                            });
+                          },
                           child: Text('RESET'),
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFFFD5722)),
                         ),
                       ],
                     ),
-                  )
+                  ),
+                  Container(
+                    height: 180,
+                  ),
                 ],
               ),
             ),

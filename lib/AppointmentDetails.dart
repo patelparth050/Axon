@@ -1,13 +1,33 @@
 import 'package:flutter/material.dart';
 
 class AppointmentDetails extends StatefulWidget {
-  const AppointmentDetails({Key key}) : super(key: key);
+  String outputDate;
+  String doctorName;
+  String appointmentTime;
+  String patientName;
+  String status;
+
+  AppointmentDetails(this.outputDate, this.doctorName, this.appointmentTime,
+      this.patientName, this.status);
 
   @override
-  State<AppointmentDetails> createState() => _AppointmentDetailsState();
+  _AppointmentDetailsState createState() => _AppointmentDetailsState(
+      this.outputDate,
+      this.doctorName,
+      this.appointmentTime,
+      this.patientName,
+      this.status);
 }
 
 class _AppointmentDetailsState extends State<AppointmentDetails> {
+  String outputDate;
+  String doctorName;
+  String appointmentTime;
+  String patientName;
+  String status;
+
+  _AppointmentDetailsState(this.outputDate, this.doctorName,
+      this.appointmentTime, this.patientName, this.status);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +103,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       height: 3,
                     ),
                     Text(
-                      'a',
+                      doctorName,
                       style: TextStyle(
                         fontSize: 17,
                       ),
@@ -99,7 +119,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       height: 3,
                     ),
                     Text(
-                      'a',
+                      patientName,
                       style: TextStyle(
                         fontSize: 17,
                       ),
@@ -122,7 +142,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       height: 5,
                     ),
                     Text(
-                      'Remember to visit',
+                      'Remember to visit' + ' ' + doctorName,
                       // + historyData['doctorName'],
                       style: TextStyle(
                         fontSize: 17,
@@ -133,7 +153,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       children: [
                         Icon(Icons.perm_contact_calendar),
                         Text(
-                          'Wed 19-April-2023',
+                          outputDate,
+                          // 'Wed 19-April-2023',
                           style: TextStyle(
                             fontSize: 19,
                           ),
@@ -145,7 +166,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       children: [
                         Icon(Icons.punch_clock),
                         Text(
-                          '6:30 PM',
+                          appointmentTime,
                           style: TextStyle(
                             fontSize: 19,
                           ),
@@ -193,7 +214,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                     Row(
                       children: [
                         Text(
-                          ' Booked',
+                          status,
                           // 'aaaa',
                           style: TextStyle(
                             fontSize: 20,

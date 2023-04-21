@@ -5,15 +5,19 @@ import 'package:axon/Reports.dart';
 import 'package:flutter/material.dart';
 
 class MyNavigationBar extends StatefulWidget {
-  const MyNavigationBar({Key key}) : super(key: key);
+  int selectedIndex;
+  MyNavigationBar(this.selectedIndex);
 
   @override
-  State<MyNavigationBar> createState() => _MyNavigationBarState();
+  _MyNavigationBarState createState() =>
+      _MyNavigationBarState(this.selectedIndex);
 }
 
 class _MyNavigationBarState extends State<MyNavigationBar> {
   int _selectedIndex = 0;
+  int selectedIndex;
 
+  _MyNavigationBarState(this.selectedIndex);
   final List<Widget> user = [
     News(),
     Book(),
@@ -23,14 +27,14 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: user[_selectedIndex],
+      body: user[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -62,7 +66,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
             label: 'Reports',
           ),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
         elevation: 5,

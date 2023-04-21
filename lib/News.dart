@@ -229,6 +229,7 @@
 
 import 'dart:convert';
 
+import 'package:axon/MyNavigationBar.dart';
 import 'package:axon/NewsDetails.dart';
 import 'package:axon/Settings.dart';
 import 'package:flutter/material.dart';
@@ -254,6 +255,7 @@ class _NewsState extends State<News> {
   bool isLoading = false;
   List newsData = List();
   int newsId;
+  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -333,7 +335,7 @@ class _NewsState extends State<News> {
               children: [
                 Container(
                   height: 150,
-                  width: MediaQuery.of(context).size.width * 0.14,
+                  width: MediaQuery.of(context).size.width * 0.16,
                   color: Color(0xFFFD5722),
                   child: Icon(
                     Icons.info,
@@ -343,7 +345,7 @@ class _NewsState extends State<News> {
                 ),
                 Container(
                   // width: 291,
-                  width: MediaQuery.of(context).size.width * 0.82,
+                  width: MediaQuery.of(context).size.width * 0.80,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -389,7 +391,7 @@ class _NewsState extends State<News> {
                           child: Row(
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.70,
+                                width: MediaQuery.of(context).size.width * 0.69,
                                 // width: 170,
                                 child: Text(
                                   newsData[itemIndex]['displayDate'],
@@ -402,7 +404,9 @@ class _NewsState extends State<News> {
                               ),
                               InkWell(
                                 onTap: () {},
-                                child: Icon(Icons.info_outline),
+                                child: Container(
+                                  child: Icon(Icons.info_outline),
+                                ),
                               ),
                             ],
                           ),
@@ -462,31 +466,51 @@ class _NewsState extends State<News> {
           ),
         ),
       ),
-      body: Stack(
-        children: <Widget>[
-          SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(1),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ListView.builder(
-                      padding: EdgeInsets.only(bottom: 10),
-                      physics: ClampingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: newsData.length,
-                      itemBuilder: (BuildContext context, int itemIndex) {
-                        return createNewsListContainer(context, itemIndex);
-                      }),
-                  // newsCardWidget(),
-                ],
+      body: RefreshIndicator(
+        color: Colors.black,
+        backgroundColor: Colors.white,
+        strokeWidth: 2.0,
+        onRefresh: () async {
+          Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (a, b, c) => MyNavigationBar(selectedIndex),
+              transitionDuration: Duration(seconds: 2),
+            ),
+            // MaterialPageRoute(
+            //   builder: (context) => Events(),
+            // ),
+          );
+          // return Future.value(false);
+          await Future.delayed(Duration(seconds: 3));
+        },
+        child: Stack(
+          children: <Widget>[
+            SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: EdgeInsets.all(1),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    ListView.builder(
+                        padding: EdgeInsets.only(bottom: 10),
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: newsData.length,
+                        itemBuilder: (BuildContext context, int itemIndex) {
+                          return createNewsListContainer(context, itemIndex);
+                        }),
+                    // newsCardWidget(),
+                  ],
+                ),
               ),
             ),
-          ),
-          isLoading ? Loader() : Container(),
-        ],
+            isLoading ? Loader() : Container(),
+          ],
+        ),
       ),
     );
   }

@@ -21,13 +21,17 @@ class _NewsDetailsState extends State<NewsDetails> {
   String token;
   bool isLoading = false;
   var newsDetailsData;
-  var title;
+  String title;
+  String title1;
+  String title2;
 
   _NewsDetailsState(this.token, this.newsId);
 
   @override
   void initState() {
-    _getNewsDetails();
+    setState(() {
+      _getNewsDetails();
+    });
     super.initState();
   }
 
@@ -62,18 +66,20 @@ class _NewsDetailsState extends State<NewsDetails> {
           "objectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobjectobject");
       print(response);
 
-      setState(() {
-        isLoading = false;
-      });
       if (response['status'] == true) {
         setState(() {
           newsDetailsData = response['data'];
           title = response['data']['title'];
+          title1 = response['data']['displayDate'];
+          title2 = response['data']['description'];
           newsId = newsDetailsData['newsId'];
         });
         print(">>>>>>>>>>>>>>");
         print(newsDetailsData);
         print(response['data']['newsId']);
+        setState(() {
+          isLoading = false;
+        });
       } else {
         showDialog(
             context: context,
@@ -140,7 +146,8 @@ class _NewsDetailsState extends State<NewsDetails> {
                     // alignment: Alignment.center,
                     child: Text(
                       // newsDetailsData["title"],
-                      newsDetailsData["title"],
+                      // newsDetailsData["title"],
+                      title,
                       // title,
                       style: TextStyle(fontSize: 20),
                     ),
@@ -151,14 +158,18 @@ class _NewsDetailsState extends State<NewsDetails> {
                     color: Colors.black,
                   ),
                   SizedBox(height: 10),
-                  Text(newsDetailsData["displayDate"]),
+                  Text(
+                    // newsDetailsData["displayDate"],
+                    title1,
+                  ),
                   SizedBox(height: 20),
                   Card(
                     // color: Colors.amber,
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Html(
-                        data: newsDetailsData["description"],
+                        data: title2,
+                        // newsDetailsData["description"],
                       ),
                       // Text(
                       //   newsDetailsData["description"],

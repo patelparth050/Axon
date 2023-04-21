@@ -23,6 +23,7 @@ class _ChangeProviderState extends State<ChangeProvider> {
   final FocusNode _nodeAppcode = FocusNode();
   TextEditingController strAppcode = TextEditingController();
   int userid;
+  int selectedIndex = 0;
 
   var data = [];
 
@@ -59,7 +60,8 @@ class _ChangeProviderState extends State<ChangeProvider> {
             Duration(seconds: 1),
             () => Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => MyNavigationBar()),
+                MaterialPageRoute(
+                    builder: (context) => MyNavigationBar(selectedIndex)),
                 (route) => false));
       } else {
         showDialog(

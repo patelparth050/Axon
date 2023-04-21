@@ -7,9 +7,17 @@
 //   static const String otpVerifyAPI = "ValidateOTP";
 // }
 
+import 'dart:async';
+
+import 'package:another_flushbar/flushbar.dart';
 import 'package:axon/Aaa.dart';
+import 'package:axon/OTPVerify.dart';
+import 'package:axon/Utils/app_url.dart';
+import 'package:axon/Widgets.dart/OverlayDialogWarning.dart';
 import 'package:flutter/material.dart';
 import 'package:sms_autofill/sms_autofill.dart';
+
+import 'Providers/HttpClient.dart';
 
 class SendOTPScreen1 extends StatefulWidget {
   SendOTPScreen1({Key key}) : super(key: key);
@@ -30,9 +38,60 @@ class _SendOTPScreen1State extends State<SendOTPScreen1> {
       "app_signature_id": appSignatureID
     };
     print(sendOtpData);
+
+    var objsendotp = {"Mobile": mobileNumber.text};
+
+    print('>>>>>>>>>>');
+    print(objsendotp);
+    // var appSignatureID = await SmsAutoFill().getAppSignature;
+
+    // Map objsendotp = {
+    //   "Mobile": strMobileNo.text,
+    //   "app_signature_id": appSignatureID
+    // };
+    print('>>>>>>>>>>');
+    print(objsendotp);
+    final Future<Map<String, dynamic>> successfulMessage =
+        HttpClient().postReq(AppUrl.sendotp, objsendotp);
+
+    await successfulMessage.then((response) {
+      print('>>>>>>>>>> Send OTP <<<<<<<<');
+      print(response);
+      setState(() {
+        var isLoading = false;
+      });
+      if (response['status'] == true) {
+        Flushbar(
+          message: 'Otp Sent Successfully',
+          duration: Duration(seconds: 5),
+        ).show(context);
+        // formKey.currentState.reset();
+
+        Timer(
+            Duration(seconds: 1),
+            () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        VerifyOTPScreen1(mobileNumber.text))));
+        Timer(Duration(seconds: 3), () {
+          // strName.clear();
+          // strBirthDate.clear();
+          // strMobileNo.clear();
+        });
+      } else {
+        showDialog(
+            context: context,
+            builder: (_) => OverlayDialogWarning(
+                message: response['displayMessage'].toString(),
+                showButton: true,
+                dialogType: DialogType.Warning));
+      }
+    });
     // Navigator.push(
     //   context,
-    //   MaterialPageRoute(builder: (context) => VerifyOTPScreen1()),
+    //   MaterialPageRoute(
+    //       builder: (context) => VerifyOTPScreen1([sendOtpData].toString())),
     // );
   }
 

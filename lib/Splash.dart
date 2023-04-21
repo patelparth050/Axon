@@ -17,6 +17,7 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   UserPreferences userPreference = UserPreferences();
   bool isLogin = false;
+  int selectedIndex = 0;
 
   @override
   void initState() {
@@ -35,7 +36,8 @@ class _SplashState extends State<Splash> {
         // is Logged In
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => MyNavigationBar()),
+            MaterialPageRoute(
+                builder: (context) => MyNavigationBar(selectedIndex)),
             (route) => false);
       } else {
         // Open Welcome Screen

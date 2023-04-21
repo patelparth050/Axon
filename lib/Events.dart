@@ -24,6 +24,7 @@ class _EventsState extends State<Events> {
   String token;
   bool isLoading = false;
   List historyData = List();
+  int selectedIndex = 2;
 
   // var historyData;
   var title;
@@ -92,36 +93,54 @@ class _EventsState extends State<Events> {
 
   createAppointmentListContainer(BuildContext context, int itemIndex) {
     // final notificationObj = listOfColumns[itemIndex];
-    var str = historyData[itemIndex]["timeSlot"];
-    var parts = str.split('');
-    var prefix = parts[1].trim() +
-        parts[2].trim() +
-        parts[3].trim() +
-        parts[4].trim() +
-        parts[5].trim() +
-        ' ' +
-        parts[6].trim() +
-        parts[7].trim();
+    // var str = historyData[itemIndex]["timeSlot"];
+    // var parts = str.split('');
+    // var prefix = parts[1].trim() +
+    //     parts[2].trim() +
+    //     parts[3].trim() +
+    //     parts[4].trim() +
+    //     parts[5].trim() +
+    //     ' ' +
+    //     parts[6].trim() +
+    //     parts[7].trim();
 
-    var str1 = historyData[itemIndex]["apptDate"];
-    var parts1 = str1.split('');
-    var prefix1 = parts1[5].trim() +
-        parts1[6].trim() +
-        '-' +
-        parts1[0].trim() +
-        parts1[1].trim() +
-        parts1[2].trim() +
-        parts1[3].trim();
+    // var str1 = historyData[itemIndex]["apptDate"];
+    // var parts1 = str1.split('');
+    // var prefix1 = parts1[5].trim() +
+    //     parts1[6].trim() +
+    //     '-' +
+    //     parts1[0].trim() +
+    //     parts1[1].trim() +
+    //     parts1[2].trim() +
+    //     parts1[3].trim();
 
-    // String now = historyData[itemIndex]["apptDate"];
-    // String formattedDate = new DateFormat.yMMMEd().parse(now);
-    // print(formattedDate);
+    String date = historyData[itemIndex]["apptDate"];
+    DateTime parseDate = new DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date);
+    var inputDate = DateTime.parse(parseDate.toString());
+    var outputFormat = DateFormat('E d-MMMM-yyyy');
+    var outputFormat1 = DateFormat('E,yyyy');
+    var outputFormat2 = DateFormat('d MMM');
+    var outputFormat3 = DateFormat('hh:mm a');
+    // var outputFormat = DateFormat('MM/dd/yyyy hh:mm a');
+    var outputDate = outputFormat.format(inputDate);
+    var outputDate1 = outputFormat1.format(inputDate);
+    var outputDate2 = outputFormat2.format(inputDate);
+    var outputDate3 = outputFormat3.format(inputDate);
+    print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+    print(outputDate);
+    print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+    String doctorName = historyData[itemIndex]["doctorName"];
+    String patientName = historyData[itemIndex]["name"];
+    String status = historyData[itemIndex]["statusText"];
     return Column(
       children: [
         InkWell(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AppointmentDetails()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AppointmentDetails(outputDate,
+                        doctorName, outputDate3, patientName, status)));
           },
           child: Card(
             margin: EdgeInsets.all(5),
@@ -132,7 +151,7 @@ class _EventsState extends State<Events> {
               children: [
                 Container(
                     height: 150,
-                    width: 87,
+                    width: MediaQuery.of(context).size.width * 0.25,
                     color: Colors.green,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -140,25 +159,25 @@ class _EventsState extends State<Events> {
                         children: [
                           Text(
                             // historyData[itemIndex]['apptDate'],
-                            prefix1,
+                            outputDate1,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 17,
+                              fontSize: 16,
                             ),
                           ),
                           SizedBox(height: 10),
                           Text(
-                            "Date",
+                            outputDate2,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 18,
+                              fontSize: 17,
                             ),
                           ),
                           SizedBox(
                             height: 50,
                           ),
                           Text(
-                            prefix,
+                            outputDate3,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
@@ -297,13 +316,17 @@ class _EventsState extends State<Events> {
         ),
       ),
       body: RefreshIndicator(
+        color: Colors.black,
+        backgroundColor: Colors.white,
+        strokeWidth: 2.0,
         onRefresh: () {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (a, b, c) => MyNavigationBar(),
+              pageBuilder: (a, b, c) => MyNavigationBar(selectedIndex),
               transitionDuration: Duration(seconds: 0),
             ),
+
             // MaterialPageRoute(
             //   builder: (context) => Events(),
             // ),

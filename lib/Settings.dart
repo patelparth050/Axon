@@ -176,7 +176,7 @@ class _SettingsState extends State<Settings> {
                           Row(
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.67,
+                                width: MediaQuery.of(context).size.width * 0.64,
                                 child: Row(
                                   children: [
                                     Icon(Icons.person),
@@ -251,7 +251,7 @@ class _SettingsState extends State<Settings> {
                           Row(
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.67,
+                                width: MediaQuery.of(context).size.width * 0.64,
                                 height: 2,
                               ),
                               Container(

@@ -137,93 +137,96 @@ class _VerifyOTPScreen1State extends State<VerifyOTPScreen1> with CodeAutoFill {
     super.dispose();
   }
 
-  _verifyOTP() async {
-    FocusScope.of(context).unfocus(); // Used foe dismiss keyboard
+//   _verifyOTP() async {
+//     FocusScope.of(context).unfocus(); // Used foe dismiss keyboard
 
-    if (otpText == '') {
-      showDialog(
-          context: context,
-          builder: (_) => OverlayDialogWarning(
-              message: "Enter OTP",
-              showButton: true,
-              dialogType: DialogType.Warning));
-    } else {
-      setState(() {
-        isLoading = true;
-      });
-      var objverifyotp = {"Mobile": MobileNumber, "OTP": otpText};
+//     if (otpText == '') {
+//       showDialog(
+//           context: context,
+//           builder: (_) => OverlayDialogWarning(
+//               message: "Enter OTP",
+//               showButton: true,
+//               dialogType: DialogType.Warning));
+//     } else {
+//       setState(() {
+//         isLoading = true;
+//       });
+//       var objverifyotp = {"Mobile": MobileNumber, "OTP": otpText};
 
-      print('>>>>>>>>>>');
-      print(objverifyotp);
-      final Future<Map<String, dynamic>> successfulMessage =
-          HttpClient().postReq(AppUrl.verifyotp, objverifyotp);
+//       print('>>>>>>>>>>');
+//       print(objverifyotp);
+//       final Future<Map<String, dynamic>> successfulMessage =
+//           HttpClient().postReq(AppUrl.verifyotp, objverifyotp);
 
-      await successfulMessage.then((response) {
-        print('>>>>>>>>>> Send OTP <<<<<<<<');
-        print(response);
-        setState(() {
-          isLoading = false;
-        });
-        if (response['status'] == true) {
-          Flushbar(
-            message: response['displayMessage'].toString(),
-            duration: Duration(seconds: 5),
-          ).show(context);
-          // Navigator.pop(context);
+//       await successfulMessage.then((response) {
+//         print('>>>>>>>>>> Send OTP <<<<<<<<');
+//         print(response);
+//         setState(() {
+//           isLoading = false;
+//         });
+//         if (response['status'] == true) {
+//           Flushbar(
+//             message: response['displayMessage'].toString(),
+//             duration: Duration(seconds: 5),
+//           ).show(context);
+//           // Navigator.pop(context);
 
-          Timer(
-              Duration(seconds: 1),
-              () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ChangeProvider())));
-        } else {
-          showDialog(
-              context: context,
-              builder: (_) => OverlayDialogWarning(
-                  message: response['message'].toString(),
-                  showButton: true,
-                  dialogType: DialogType.Warning));
-        }
-      });
-    }
-  }
+//           Timer(
+//               Duration(seconds: 1),
+//               () => Navigator.push(context,
+//                   MaterialPageRoute(builder: (context) => ChangeProvider())));
+//         } else {
+//           showDialog(
+//               context: context,
+//               builder: (_) => OverlayDialogWarning(
+//                   message: response['message'].toString(),
+//                   showButton: true,
+//                   dialogType: DialogType.Warning));
+//         }
+//       });
+//     }
+//   }
 
-// Calling Resend OTP Method
-  _resendOTP() async {
-    FocusScope.of(context).unfocus(); // Used foe dismiss keyboard
-    setState(() {
-      isLoading = true;
-    });
-    var objsendotp = {"Mobile": MobileNumber};
+// // Calling Resend OTP Method
+//   _resendOTP() async {
+//     FocusScope.of(context).unfocus(); // Used foe dismiss keyboard
+//     setState(() {
+//       isLoading = true;
+//     });
+//     var objsendotp = {"Mobile": MobileNumber};
 
-    print('>>>>>>>>>>');
-    print(objsendotp);
-    final Future<Map<String, dynamic>> successfulMessage =
-        HttpClient().postReq(AppUrl.sendotp, objsendotp);
+//     print('>>>>>>>>>>');
+//     print(objsendotp);
+//     final Future<Map<String, dynamic>> successfulMessage =
+//         HttpClient().postReq(AppUrl.sendotp, objsendotp);
 
-    await successfulMessage.then((response) {
-      print('>>>>>>>>>> Send OTP <<<<<<<<');
-      print(response);
-      setState(() {
-        isLoading = false;
-      });
-      if (response['status'] == true) {
-        Flushbar(
-          message: 'Otp Sent Successfully',
-          duration: Duration(seconds: 5),
-        ).show(context);
-      } else {
-        showDialog(
-            context: context,
-            builder: (_) => OverlayDialogWarning(
-                message: response['message'].toString(),
-                showButton: true,
-                dialogType: DialogType.Warning));
-      }
-    });
-  }
+//     await successfulMessage.then((response) {
+//       print('>>>>>>>>>> Send OTP <<<<<<<<');
+//       print(response);
+//       setState(() {
+//         isLoading = false;
+//       });
+//       if (response['status'] == true) {
+//         Flushbar(
+//           message: 'Otp Sent Successfully',
+//           duration: Duration(seconds: 5),
+//         ).show(context);
+//       } else {
+//         showDialog(
+//             context: context,
+//             builder: (_) => OverlayDialogWarning(
+//                 message: response['message'].toString(),
+//                 showButton: true,
+//                 dialogType: DialogType.Warning));
+//       }
+//     });
+//   }
 
   @override
   Widget build(BuildContext context) {
+    print('0000000000000000000000000000000000000000000000000000');
+    print(MobileNumber);
+    print('000000000000000000000000000000000000000000000000000');
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
@@ -254,7 +257,7 @@ class _VerifyOTPScreen1State extends State<VerifyOTPScreen1> with CodeAutoFill {
                   print("codeValue");
                   print(codeValue);
                   print("codeValue");
-                  _verifyOTP();
+                  // _verifyOTP();
                 },
                 child: const Text("Verify OTP")),
             ElevatedButton(

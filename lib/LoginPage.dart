@@ -380,12 +380,14 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
     print('>>>>>>>>>>');
     print(objsendotp);
-    // var appSignatureID = await SmsAutoFill().getAppSignature;
+    var appSignatureID = await SmsAutoFill().getAppSignature;
 
-    // Map objsendotp = {
-    //   "Mobile": strMobileNo.text,
-    //   "app_signature_id": appSignatureID
-    // };
+    Map objsendotp1 = {
+      "Mobile": strMobileNo.text,
+      "app_signature_id": appSignatureID
+    };
+    print(objsendotp1);
+    print('0000000000000000000000000000000000000000000000000000000000');
     print('>>>>>>>>>>');
     print(objsendotp);
     final Future<Map<String, dynamic>> successfulMessage =
@@ -481,7 +483,11 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                                   ),
                                   Row(
                                     children: [
-                                      SizedBox(width: 206),
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.58),
                                       TextButton(
                                         onPressed: () {
                                           _sendOTP();
