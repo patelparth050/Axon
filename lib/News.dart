@@ -228,12 +228,14 @@
 // }
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:axon/MyNavigationBar.dart';
 import 'package:axon/NewsDetails.dart';
 import 'package:axon/Settings.dart';
 import 'package:flutter/material.dart';
 
+import 'PaymentHistory.dart';
 import 'Providers/HttpClient.dart';
 import 'Utils/Loader.dart';
 import 'Utils/SharePreference.dart';
@@ -241,6 +243,7 @@ import 'Utils/app_url.dart';
 import 'Widgets.dart/OverlayDialogWarning.dart';
 import 'api_service.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class News extends StatefulWidget {
   const News({Key key}) : super(key: key);
@@ -335,7 +338,7 @@ class _NewsState extends State<News> {
               children: [
                 Container(
                   height: 150,
-                  width: MediaQuery.of(context).size.width * 0.16,
+                  width: MediaQuery.of(context).size.width * 0.15,
                   color: Color(0xFFFD5722),
                   child: Icon(
                     Icons.info,
@@ -345,7 +348,7 @@ class _NewsState extends State<News> {
                 ),
                 Container(
                   // width: 291,
-                  width: MediaQuery.of(context).size.width * 0.80,
+                  width: MediaQuery.of(context).size.width * 0.79,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -391,7 +394,7 @@ class _NewsState extends State<News> {
                           child: Row(
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.69,
+                                width: MediaQuery.of(context).size.width * 0.67,
                                 // width: 170,
                                 child: Text(
                                   newsData[itemIndex]['displayDate'],
@@ -426,12 +429,34 @@ class _NewsState extends State<News> {
     );
   }
 
+  whatsapp() async {
+    var contact = "+916353335967";
+    var androidUrl = "whatsapp://send?phone=$contact&text=";
+    var iosUrl = "https://wa.me/$contact?text=${Uri.parse('')}";
+
+    try {
+      if (Platform.isIOS) {
+        await launchUrl(Uri.parse(iosUrl));
+      } else {
+        await launchUrl(Uri.parse(androidUrl));
+      }
+    } on Exception {
+      showDialog(
+          context: context,
+          builder: (_) => OverlayDialogWarning(
+              message: "WhatsApp is not installed",
+              showButton: true,
+              dialogType: DialogType.Warning));
+      // EasyLoading.showError('WhatsApp is not installed.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70.0),
+        preferredSize: Size.fromHeight(60.0),
         child: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: false,
@@ -439,28 +464,72 @@ class _NewsState extends State<News> {
           backgroundColor: Color(0xffffffff),
           title: Padding(
             padding: EdgeInsets.only(
-              top: 16.0,
+              top: 5.0,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Notice Board",
-                  style: TextStyle(
-                    color: Colors.black,
-                    // fontWeight: FontWeight.bold,
-                    fontSize: 25,
+                Container(
+                  height: 69,
+                  width: MediaQuery.of(context).size.width * 0.10,
+                  child: Image.asset('images/axon-icon.png'),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.46,
+                  child: Text(
+                    "  Notice Board",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 22,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.settings_outlined),
-                  color: Colors.black,
-                  iconSize: 33,
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Settings()));
-                  },
-                )
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.34,
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          whatsapp();
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(8),
+                          height: 27,
+                          child: Image.asset('images/whatsapp.png'),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PaymentHistory()));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(8),
+                          height: 27,
+                          child: Image.asset('images/rupee.png'),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Settings()));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(8, 8, 0, 8),
+                          height: 27,
+                          child: Image.asset('images/settings.png'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -489,11 +558,11 @@ class _NewsState extends State<News> {
             SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               child: Padding(
-                padding: EdgeInsets.all(1),
+                padding: EdgeInsets.all(5),
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 10,
+                      height: 3,
                     ),
                     ListView.builder(
                         padding: EdgeInsets.only(bottom: 10),

@@ -1,5 +1,6 @@
 import 'package:axon/LoginPage.dart';
 import 'package:axon/News.dart';
+import 'package:axon/Utils/Loader.dart';
 import 'package:flutter/material.dart';
 
 import 'ChangeProvider.dart';
@@ -15,6 +16,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   UserPreferences userPreference = UserPreferences();
   String mobile;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -116,14 +118,14 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70.0),
+        preferredSize: Size.fromHeight(60.0),
         child: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: false,
           elevation: 0,
           backgroundColor: Color(0xffffffff),
           leading: Padding(
-            padding: EdgeInsets.only(top: 20),
+            padding: EdgeInsets.only(top: 5.0),
             child: IconButton(
               color: Colors.black,
               onPressed: () {
@@ -134,7 +136,7 @@ class _SettingsState extends State<Settings> {
           ),
           title: Padding(
             padding: EdgeInsets.only(
-              top: 16.0,
+              top: 5.0,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,7 +146,7 @@ class _SettingsState extends State<Settings> {
                   style: TextStyle(
                     color: Colors.black,
                     // fontWeight: FontWeight.bold,
-                    fontSize: 25,
+                    fontSize: 22,
                   ),
                 ),
               ],

@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:axon/Appointment.dart';
 import 'package:axon/Utils/Loader.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'Models/doctors_data.dart';
+import 'PaymentHistory.dart';
 import 'Providers/HttpClient.dart';
 import 'SelectAppointmentDate.dart';
 import 'SelectPatient.dart';
@@ -33,6 +36,7 @@ class _BookState extends State<Book> {
   String displayPatientName = 'Select Patient';
   String displayBirthDate;
   String displayGender;
+  String CaseNo = "";
   String displaytimingId;
   String selectedDocotrId;
   var appointmentData;
@@ -127,7 +131,7 @@ class _BookState extends State<Book> {
       isLoading = true;
     });
     var objsendotp = {
-      "CaseNo": "1",
+      "CaseNo": CaseNo,
       "Name": displayPatientName,
       "Mobile": mobile,
       "Email": "",
@@ -200,12 +204,34 @@ class _BookState extends State<Book> {
     _selectedVal = productSizesList[0];
   }
 
+  whatsapp() async {
+    var contact = "+916353335967";
+    var androidUrl = "whatsapp://send?phone=$contact&text=";
+    var iosUrl = "https://wa.me/$contact?text=${Uri.parse('')}";
+
+    try {
+      if (Platform.isIOS) {
+        await launchUrl(Uri.parse(iosUrl));
+      } else {
+        await launchUrl(Uri.parse(androidUrl));
+      }
+    } on Exception {
+      showDialog(
+          context: context,
+          builder: (_) => OverlayDialogWarning(
+              message: "WhatsApp is not installed",
+              showButton: true,
+              dialogType: DialogType.Warning));
+      // EasyLoading.showError('WhatsApp is not installed.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70.0),
+        preferredSize: Size.fromHeight(60.0),
         child: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: false,
@@ -213,28 +239,72 @@ class _BookState extends State<Book> {
           backgroundColor: Color(0xffffffff),
           title: Padding(
             padding: EdgeInsets.only(
-              top: 16.0,
+              top: 5.0,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Book Appointment",
-                  style: TextStyle(
-                    color: Colors.black,
-                    // fontWeight: FontWeight.bold,
-                    fontSize: 25,
+                Container(
+                  height: 69,
+                  width: MediaQuery.of(context).size.width * 0.10,
+                  child: Image.asset('images/axon-icon.png'),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.46,
+                  child: Text(
+                    "  Book Appointment",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 22,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.settings_outlined),
-                  color: Colors.black,
-                  iconSize: 33,
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Settings()));
-                  },
-                )
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.34,
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          whatsapp();
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(8),
+                          height: 27,
+                          child: Image.asset('images/whatsapp.png'),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PaymentHistory()));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(8),
+                          height: 27,
+                          child: Image.asset('images/rupee.png'),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Settings()));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(8, 8, 0, 8),
+                          height: 27,
+                          child: Image.asset('images/settings.png'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -561,12 +631,14 @@ class _BookState extends State<Book> {
     print(result[0]);
     print(result[1]);
     print(result[2]);
+    print(result[3]);
 
     if (result != null) {
       setState(() {
         displayPatientName = result[0];
         displayBirthDate = result[1];
         displayGender = result[2];
+        CaseNo = result[3];
       });
     }
   }

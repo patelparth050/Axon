@@ -73,13 +73,13 @@ class _NewsDetailsState extends State<NewsDetails> {
           title1 = response['data']['displayDate'];
           title2 = response['data']['description'];
           newsId = newsDetailsData['newsId'];
+          setState(() {
+            isLoading = false;
+          });
         });
         print(">>>>>>>>>>>>>>");
         print(newsDetailsData);
         print(response['data']['newsId']);
-        setState(() {
-          isLoading = false;
-        });
       } else {
         showDialog(
             context: context,
@@ -134,55 +134,57 @@ class _NewsDetailsState extends State<NewsDetails> {
         children: <Widget>[
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                    padding:
-                        EdgeInsets.only(left: 28, right: 8, bottom: 8, top: 8),
-                    // alignment: Alignment.center,
-                    child: Text(
-                      // newsDetailsData["title"],
-                      // newsDetailsData["title"],
-                      title,
-                      // title,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    height: 2,
-                    color: Colors.black,
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    // newsDetailsData["displayDate"],
-                    title1,
-                  ),
-                  SizedBox(height: 20),
-                  Card(
-                    // color: Colors.amber,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Html(
-                        data: title2,
-                        // newsDetailsData["description"],
-                      ),
-                      // Text(
-                      //   newsDetailsData["description"],
-                      //   style: TextStyle(
-                      //     fontSize: 15,
-                      //     fontWeight: FontWeight.normal,
-                      //   ),
-                      // ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                padding: const EdgeInsets.all(8.0),
+                child: isLoading
+                    ? isLoading
+                        ? Loader()
+                        : Container()
+                    : Column(
+                        children: [
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(
+                                left: 28, right: 8, bottom: 8, top: 8),
+                            // alignment: Alignment.center,
+                            child: Text(
+                              // newsDetailsData["title"],
+                              title,
+                              // title,
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            height: 2,
+                            color: Colors.black,
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            // newsDetailsData["displayDate"],
+                            title1,
+                          ),
+                          SizedBox(height: 20),
+                          Card(
+                            // color: Colors.amber,
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Html(
+                                data: title2,
+                                // newsDetailsData["description"],
+                              ),
+                              // Text(
+                              //   newsDetailsData["description"],
+                              //   style: TextStyle(
+                              //     fontSize: 15,
+                              //     fontWeight: FontWeight.normal,
+                              //   ),
+                              // ),
+                            ),
+                          ),
+                        ],
+                      )),
           ),
           isLoading ? Loader() : Container(),
         ],

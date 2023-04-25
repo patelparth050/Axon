@@ -1,5 +1,6 @@
 import 'package:axon/Utils/Loader.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'Providers/HttpClient.dart';
 import 'Utils/SharePreference.dart';
@@ -81,9 +82,23 @@ class _AppointmentState extends State<Appointment> {
   //     }
   //   });
   // }
-
   @override
   Widget build(BuildContext context) {
+    String date = appointmentData["apptDate"];
+    DateTime parseDate = new DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date);
+    var inputDate = DateTime.parse(parseDate.toString());
+    var outputFormat = DateFormat('E d-MMMM-yyyy');
+    var outputFormat1 = DateFormat('E,yyyy');
+    var outputFormat2 = DateFormat('d MMM');
+    var outputFormat3 = DateFormat('hh:mm a');
+    // var outputFormat = DateFormat('MM/dd/yyyy hh:mm a');
+    var outputDate = outputFormat.format(inputDate);
+    var outputDate1 = outputFormat1.format(inputDate);
+    var outputDate2 = outputFormat2.format(inputDate);
+    var outputDate3 = outputFormat3.format(inputDate);
+    print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+    print(outputDate);
+    print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: Padding(
@@ -180,7 +195,7 @@ class _AppointmentState extends State<Appointment> {
                       children: [
                         Icon(Icons.perm_contact_calendar),
                         Text(
-                          'Wed 19-April-2023----------',
+                          outputDate,
                           style: TextStyle(
                             fontSize: 19,
                           ),
@@ -192,7 +207,7 @@ class _AppointmentState extends State<Appointment> {
                       children: [
                         Icon(Icons.punch_clock),
                         Text(
-                          '6:30 PM---------',
+                          outputDate3,
                           style: TextStyle(
                             fontSize: 19,
                           ),
@@ -202,7 +217,7 @@ class _AppointmentState extends State<Appointment> {
                     Row(
                       children: [
                         SizedBox(
-                          width: 207,
+                          width: MediaQuery.of(context).size.width * 0.50,
                         ),
                         TextButton(
                             onPressed: () {},
@@ -248,7 +263,7 @@ class _AppointmentState extends State<Appointment> {
                           ),
                         ),
                         SizedBox(
-                          width: 200,
+                          width: MediaQuery.of(context).size.width * 0.50,
                         ),
                         TextButton(
                             onPressed: () {},

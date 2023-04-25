@@ -176,7 +176,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                     Row(
                       children: [
                         SizedBox(
-                          width: 207,
+                          width: MediaQuery.of(context).size.width * 0.50,
                         ),
                         TextButton(
                             onPressed: () {},
@@ -222,7 +222,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                           ),
                         ),
                         SizedBox(
-                          width: 200,
+                          width: MediaQuery.of(context).size.width * 0.50,
                         ),
                         TextButton(
                             onPressed: () {},

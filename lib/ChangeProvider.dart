@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'MyNavigationBar.dart';
 import 'Providers/HttpClient.dart';
 import 'Utils/SharePreference.dart';
 import 'Utils/app_url.dart';
 import 'Widgets.dart/OverlayDialogWarning.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 class ChangeProvider extends StatefulWidget {
   const ChangeProvider({Key key}) : super(key: key);
@@ -26,6 +28,25 @@ class _ChangeProviderState extends State<ChangeProvider> {
   int selectedIndex = 0;
 
   var data = [];
+
+  Future _qrScanner() async {
+    var camaraStatus = await Permission.camera.status;
+    if (camaraStatus.isGranted) {
+      String qrdata = await scanner.scan();
+      print('--------------------------------------------------------------');
+      print(qrdata);
+      print('-------------------------------------------------------------');
+    } else {
+      var isGrant = await Permission.camera.request();
+
+      if (isGrant.isGranted) {
+        String qrdata = await scanner.scan();
+        print('--------------------------------------------------------------');
+        print(qrdata);
+        print('--------------------------------------------------------------');
+      }
+    }
+  }
 
   _getCategory() async {
     print("Call GetCustomerTokenByAppCode method");
@@ -148,7 +169,9 @@ class _ChangeProviderState extends State<ChangeProvider> {
                           ),
                           SizedBox(height: 10),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              _qrScanner();
+                            },
                             child: Row(
                               children: [
                                 SizedBox(width: 10),

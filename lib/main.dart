@@ -19,12 +19,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'RAD',
+      title: 'Axon',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'Poppins',
+        fontFamily: 'FontSecond',
       ),
-      home: Splash(),
+      home: ChangeProvider(),
       // Calendar(),
     );
   }

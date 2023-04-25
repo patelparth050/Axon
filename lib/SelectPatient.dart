@@ -11,7 +11,8 @@ class SelectPatient extends StatefulWidget {
 }
 
 class _SelectPatientState extends State<SelectPatient> {
-  String group1Value;
+  String genderValue;
+  String CaseNo = "New";
 
   final formKey = GlobalKey<FormState>();
   final FocusNode _nodeName = FocusNode();
@@ -198,10 +199,10 @@ class _SelectPatientState extends State<SelectPatient> {
                                           Radio(
                                             value: 'Male',
                                             activeColor: Color(0xFFFD5722),
-                                            groupValue: group1Value,
+                                            groupValue: genderValue,
                                             onChanged: (value) {
                                               setState(() {
-                                                group1Value = value;
+                                                genderValue = value;
                                               });
                                             },
                                           ),
@@ -225,10 +226,10 @@ class _SelectPatientState extends State<SelectPatient> {
                                           Radio(
                                             value: 'Female',
                                             activeColor: Color(0xFFFD5722),
-                                            groupValue: group1Value,
+                                            groupValue: genderValue,
                                             onChanged: (value) {
                                               setState(() {
-                                                group1Value = value;
+                                                genderValue = value;
                                               });
                                             },
                                           ),
@@ -259,7 +260,8 @@ class _SelectPatientState extends State<SelectPatient> {
                                           ? () => Navigator.pop(context, [
                                                 strName.text,
                                                 strBirthDate.text,
-                                                group1Value,
+                                                genderValue,
+                                                CaseNo,
                                               ])
                                           : null,
                                       child: Text(
