@@ -128,11 +128,22 @@ class _PaymentHistoryState extends State<PaymentHistory> {
       // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(
+          showModalBottomSheet<void>(
               isScrollControlled: true,
               backgroundColor: Colors.transparent,
               context: context,
-              builder: (context) => buildSheet());
+              builder: (BuildContext context) {
+                return PaymentSheet();
+              });
+          // showModalBottomSheet(
+          //     context: context,
+          //     builder: (c) {
+          //       return StatefulBuilder(
+          //         builder: (context, setStateSB) => DraggableScrollableSheet(
+          //           builder: (context, scrollController) {},
+          //         ),
+          //       );
+          //     });
         },
         backgroundColor: Colors.green,
         child: Icon(Icons.add),
@@ -140,244 +151,527 @@ class _PaymentHistoryState extends State<PaymentHistory> {
     );
   }
 
-  Widget buildSheet() {
-    return DraggableScrollableSheet(
-        initialChildSize: 0.84,
-        maxChildSize: 0.84,
-        minChildSize: 0.84,
-        builder: (_, controller) {
-          return Container(
-            margin: EdgeInsets.only(
-              left: 4,
-              right: 4,
-              bottom: 4,
-            ),
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-            ),
-            child: ListView(
-              controller: controller,
-              children: [
-                Form(
-                  key: formKey,
-                  onChanged: () => setState(
-                      () => _enableBtn = formKey.currentState.validate()),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.57,
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Select Payment Reason',
-                                  style: TextStyle(
-                                      fontSize: 23,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Icon(
-                                    Icons.close,
-                                    color: Colors.black,
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.02,
-                            ),
-                            Container(
-                              child: Row(
+  // Widget buildSheet() {
+  //   return DraggableScrollableSheet(
+  //       initialChildSize: 0.87,
+  //       maxChildSize: 0.87,
+  //       minChildSize: 0.87,
+  //       // builder: (_, controller) {
+  //       builder: (BuildContext context, ScrollController scrollController) {
+  //         return Container(
+  //           margin: EdgeInsets.only(
+  //             left: 4,
+  //             right: 4,
+  //             bottom: 4,
+  //           ),
+  //           padding: EdgeInsets.all(8),
+  //           decoration: BoxDecoration(
+  //             borderRadius: BorderRadius.circular(10),
+  //             color: Colors.white,
+  //           ),
+  //           child: ListView(
+  //             controller: scrollController,
+  //             children: [
+  //               Form(
+  //                 key: formKey,
+  //                 onChanged: () => setState(
+  //                     () => _enableBtn = formKey.currentState.validate()),
+  //                 child: Column(
+  //                   children: [
+  //                     Container(
+  //                       height: MediaQuery.of(context).size.height * 0.57,
+  //                       child: Column(
+  //                         children: [
+  //                           Row(
+  //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                             children: [
+  //                               Text(
+  //                                 'Select Payment Reason',
+  //                                 style: TextStyle(
+  //                                     fontSize: 23,
+  //                                     fontWeight: FontWeight.w600),
+  //                               ),
+  //                               TextButton(
+  //                                 onPressed: () {
+  //                                   Navigator.pop(context);
+  //                                 },
+  //                                 child: Icon(
+  //                                   Icons.close,
+  //                                   color: Colors.black,
+  //                                 ),
+  //                               )
+  //                             ],
+  //                           ),
+  //                           SizedBox(
+  //                             height: MediaQuery.of(context).size.height * 0.02,
+  //                           ),
+  //                           Container(
+  //                             child: Row(
+  //                               mainAxisAlignment:
+  //                                   MainAxisAlignment.spaceBetween,
+  //                               children: [
+  //                                 Container(
+  //                                   child: Text(
+  //                                     "Cunsultation",
+  //                                     style: const TextStyle(
+  //                                       fontSize: 20.0,
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                                 Radio(
+  //                                   value: 'Cunsultation',
+  //                                   activeColor: Color(0xFFFD5722),
+  //                                   groupValue: genderValue,
+  //                                   onChanged: (value) {
+  //                                     setState(() {
+  //                                       genderValue = value;
+  //                                     });
+  //                                   },
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ),
+  //                           Container(
+  //                             height: 1,
+  //                             color: Colors.grey,
+  //                           ),
+  //                           Container(
+  //                             child: Row(
+  //                               mainAxisAlignment:
+  //                                   MainAxisAlignment.spaceBetween,
+  //                               children: [
+  //                                 Container(
+  //                                   child: Text(
+  //                                     "Tele-Cunsultation",
+  //                                     style: const TextStyle(
+  //                                       fontSize: 20.0,
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                                 Radio(
+  //                                   value: 'Tele-Cunsultation',
+  //                                   activeColor: Color(0xFFFD5722),
+  //                                   groupValue: genderValue,
+  //                                   onChanged: (value) {
+  //                                     setState(() {
+  //                                       genderValue = value;
+  //                                     });
+  //                                   },
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ),
+  //                           Container(
+  //                             height: 1,
+  //                             color: Colors.grey,
+  //                           ),
+  //                           Container(
+  //                             child: Row(
+  //                               mainAxisAlignment:
+  //                                   MainAxisAlignment.spaceBetween,
+  //                               children: [
+  //                                 Container(
+  //                                   child: Text(
+  //                                     "Vaccination",
+  //                                     style: const TextStyle(
+  //                                       fontSize: 20.0,
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                                 Radio(
+  //                                   value: 'Vaccination',
+  //                                   activeColor: Color(0xFFFD5722),
+  //                                   groupValue: genderValue,
+  //                                   onChanged: (value) {
+  //                                     setState(() {
+  //                                       genderValue = value;
+  //                                     });
+  //                                   },
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ),
+  //                           Container(
+  //                             height: 1,
+  //                             color: Colors.grey,
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                     Container(
+  //                       child: Column(
+  //                         children: [
+  //                           TextFormField(
+  //                             focusNode: _nodeAmount,
+  //                             controller: strAmount,
+  //                             keyboardType: TextInputType.number,
+  //                             validator: (value) =>
+  //                                 value.isEmpty ? "Please enter Amount" : null,
+  //                             autovalidateMode:
+  //                                 AutovalidateMode.onUserInteraction,
+  //                             textInputAction: TextInputAction.next,
+  //                             decoration: InputDecoration(
+  //                               hintText: 'Amount',
+  //                             ),
+  //                           ),
+  //                           TextFormField(
+  //                             focusNode: _nodeEmail,
+  //                             controller: strEmail,
+  //                             keyboardType: TextInputType.text,
+  //                             validator: (value) =>
+  //                                 value.isEmpty ? "Please enter email" : null,
+  //                             autovalidateMode:
+  //                                 AutovalidateMode.onUserInteraction,
+  //                             textInputAction: TextInputAction.next,
+  //                             decoration: InputDecoration(
+  //                               hintText: 'Email Id',
+  //                             ),
+  //                           ),
+  //                           Row(
+  //                             children: [
+  //                               Checkbox(
+  //                                 value: agree,
+  //                                 onChanged: (value) {
+  //                                   setState(() {
+  //                                     agree = value ?? false;
+  //                                   });
+  //                                 },
+  //                               ),
+  //                               Text(
+  //                                 'I accept  ',
+  //                                 style: TextStyle(
+  //                                     color: Colors.black, fontSize: 17),
+  //                               ),
+  //                               GestureDetector(
+  //                                 onTap: () {},
+  //                                 child: Text(
+  //                                   'terms and conditions',
+  //                                   style: TextStyle(
+  //                                     color: Color(0xFFFD5722),
+  //                                     fontSize: 20,
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                           Row(
+  //                             children: [
+  //                               Container(
+  //                                 width:
+  //                                     MediaQuery.of(context).size.width * 0.56,
+  //                               ),
+  //                               Container(
+  //                                 // padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+  //                                 height: 36,
+  //                                 width:
+  //                                     MediaQuery.of(context).size.width * 0.35,
+  //                                 child: ElevatedButton(
+  //                                   onPressed: () {},
+  //                                   child: Text(
+  //                                     'START PAYMENT',
+  //                                     style: TextStyle(
+  //                                         fontSize: 16,
+  //                                         fontWeight: FontWeight.w600,
+  //                                         color: Colors.white),
+  //                                   ),
+  //                                   style: ElevatedButton.styleFrom(
+  //                                     primary: Color(0xFFFD5722),
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         );
+  //       });
+  // }
+}
+
+class PaymentSheet extends StatefulWidget {
+  const PaymentSheet({Key key}) : super(key: key);
+
+  @override
+  State<PaymentSheet> createState() => _PaymentSheetState();
+}
+
+class _PaymentSheetState extends State<PaymentSheet> {
+  String genderValue;
+  final formKey = GlobalKey<FormState>();
+  bool _enableBtn = false;
+  bool agree = false;
+  final FocusNode _nodeAmount = FocusNode();
+  final FocusNode _nodeEmail = FocusNode();
+  TextEditingController strAmount = TextEditingController();
+  TextEditingController strEmail = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return StatefulBuilder(builder: (context, state) {
+      return DraggableScrollableSheet(
+          initialChildSize: 0.87,
+          maxChildSize: 0.87,
+          minChildSize: 0.87,
+          // builder: (_, controller) {
+          builder: (BuildContext context, ScrollController scrollController) {
+            return Container(
+              margin: EdgeInsets.only(
+                left: 4,
+                right: 4,
+                bottom: 4,
+              ),
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              child: ListView(
+                controller: scrollController,
+                children: [
+                  Form(
+                    key: formKey,
+                    onChanged: () => setState(
+                        () => _enableBtn = formKey.currentState.validate()),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.57,
+                          child: Column(
+                            children: [
+                              Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Container(
-                                    child: Text(
-                                      "Cunsultation",
-                                      style: const TextStyle(
-                                        fontSize: 20.0,
-                                      ),
-                                    ),
-                                  ),
-                                  Radio(
-                                    value: 'Cunsultation',
-                                    activeColor: Color(0xFFFD5722),
-                                    groupValue: genderValue,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        genderValue = value;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: 1,
-                              color: Colors.grey,
-                            ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Text(
-                                      "Tele-Cunsultation",
-                                      style: const TextStyle(
-                                        fontSize: 20.0,
-                                      ),
-                                    ),
-                                  ),
-                                  Radio(
-                                    value: 'Tele-Cunsultation',
-                                    activeColor: Color(0xFFFD5722),
-                                    groupValue: genderValue,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        genderValue = value;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: 1,
-                              color: Colors.grey,
-                            ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    child: Text(
-                                      "Vaccination",
-                                      style: const TextStyle(
-                                        fontSize: 20.0,
-                                      ),
-                                    ),
-                                  ),
-                                  Radio(
-                                    value: 'Vaccination',
-                                    activeColor: Color(0xFFFD5722),
-                                    groupValue: genderValue,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        genderValue = value;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: 1,
-                              color: Colors.grey,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              focusNode: _nodeAmount,
-                              controller: strAmount,
-                              keyboardType: TextInputType.number,
-                              validator: (value) =>
-                                  value.isEmpty ? "Please enter Amount" : null,
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
-                                hintText: 'Amount',
-                              ),
-                            ),
-                            TextFormField(
-                              focusNode: _nodeEmail,
-                              controller: strEmail,
-                              keyboardType: TextInputType.text,
-                              validator: (value) =>
-                                  value.isEmpty ? "Please enter email" : null,
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              textInputAction: TextInputAction.next,
-                              decoration: InputDecoration(
-                                hintText: 'Email Id',
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Checkbox(
-                                  value: agree,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      agree = value ?? false;
-                                    });
-                                  },
-                                ),
-                                Text(
-                                  'I accept  ',
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 17),
-                                ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Text(
-                                    'terms and conditions',
+                                  Text(
+                                    'Select Payment Reason',
                                     style: TextStyle(
-                                      color: Color(0xFFFD5722),
-                                      fontSize: 20,
-                                    ),
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.w600),
                                   ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.56,
-                                ),
-                                Container(
-                                  // padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                                  height: 36,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.35,
-                                  child: ElevatedButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      'START PAYMENT',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.black,
                                     ),
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Color(0xFFFD5722),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
+                              ),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        "Cunsultation",
+                                        style: const TextStyle(
+                                          fontSize: 20.0,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Radio(
+                                      value: 'Cunsultation',
+                                      activeColor: Color(0xFFFD5722),
+                                      groupValue: genderValue,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          genderValue = value;
+                                        });
+                                      },
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ],
+                              ),
+                              Container(
+                                height: 1,
+                                color: Colors.grey,
+                              ),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        "Tele-Cunsultation",
+                                        style: const TextStyle(
+                                          fontSize: 20.0,
+                                        ),
+                                      ),
+                                    ),
+                                    Radio(
+                                      value: 'Tele-Cunsultation',
+                                      activeColor: Color(0xFFFD5722),
+                                      groupValue: genderValue,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          genderValue = value;
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                height: 1,
+                                color: Colors.grey,
+                              ),
+                              Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        "Vaccination",
+                                        style: const TextStyle(
+                                          fontSize: 20.0,
+                                        ),
+                                      ),
+                                    ),
+                                    Radio(
+                                      value: 'Vaccination',
+                                      activeColor: Color(0xFFFD5722),
+                                      groupValue: genderValue,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          genderValue = value;
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                height: 1,
+                                color: Colors.grey,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                        Container(
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                focusNode: _nodeAmount,
+                                controller: strAmount,
+                                keyboardType: TextInputType.number,
+                                validator: (value) => value.isEmpty
+                                    ? "Please enter Amount"
+                                    : null,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                textInputAction: TextInputAction.next,
+                                decoration: InputDecoration(
+                                  hintText: 'Amount',
+                                ),
+                              ),
+                              TextFormField(
+                                focusNode: _nodeEmail,
+                                controller: strEmail,
+                                keyboardType: TextInputType.text,
+                                validator: (value) =>
+                                    value.isEmpty ? "Please enter email" : null,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                textInputAction: TextInputAction.next,
+                                decoration: InputDecoration(
+                                  hintText: 'Email Id',
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value: agree,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        agree = value ?? false;
+                                      });
+                                    },
+                                  ),
+                                  Text(
+                                    'I accept  ',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 17),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {},
+                                    child: Text(
+                                      'terms and conditions',
+                                      style: TextStyle(
+                                        color: Color(0xFFFD5722),
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.56,
+                                  ),
+                                  Container(
+                                    // padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                    height: 36,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.35,
+                                    child: ElevatedButton(
+                                      onPressed: () {},
+                                      child: Text(
+                                        'START PAYMENT',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white),
+                                      ),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Color(0xFFFD5722),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        });
+                ],
+              ),
+            );
+          });
+    });
   }
 }
+
+
+// showModalBottomSheet(
+//     context: context,
+//     builder: (context) {
+//       return StatefulBuilder(
+//           builder: (BuildContext context, StateSetter setState /*You can rename this!*/) {
+//         return Container(
+//           height: heightOfModalBottomSheet,
+//           child: RaisedButton(onPressed: () {
+//             setState(() {
+//               heightOfModalBottomSheet += 10;
+//             });
+//           }),
+//         );
+//       });
+// });

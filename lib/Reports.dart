@@ -124,6 +124,7 @@ class _ReportsState extends State<Reports> {
           child: const Text('showModalBottomSheet'),
           onPressed: () {
             showModalBottomSheet<void>(
+              isScrollControlled: true,
               context: context,
               builder: (BuildContext context) {
                 return DialogStatefull();
@@ -145,12 +146,13 @@ class DialogStatefull extends StatefulWidget {
 
 class _DialogStatefullState extends State<DialogStatefull> {
   int selected = 0;
+  String genderValue;
 
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, state) {
       return Container(
-        height: 200,
+        height: 660,
         color: Colors.amber,
         child: Center(
           child: Column(
@@ -158,6 +160,16 @@ class _DialogStatefullState extends State<DialogStatefull> {
               customRadio("helo", 0),
               customRadio("helo", 1),
               customRadio("helo", 2),
+              Radio(
+                value: 'Cunsultation',
+                activeColor: Color(0xFFFD5722),
+                groupValue: genderValue,
+                onChanged: (value) {
+                  setState(() {
+                    genderValue = value;
+                  });
+                },
+              ),
             ],
           ),
         ),
