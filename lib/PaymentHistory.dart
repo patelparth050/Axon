@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PaymentHistory extends StatefulWidget {
   const PaymentHistory({Key key}) : super(key: key);
@@ -22,6 +24,53 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   //   // Show BottomSheet here using the Scaffold state instead ot«f the Scaffold context
   //   scaffoldState.currentState
   //       .showBottomSheet((context) => Container(color: Colors.red));
+  // }
+  // Razorpay _razorpay;
+
+  // void _handlePaymentSuccess(PaymentSuccessResponse response) {
+  //   Fluttertoast.showToast(
+  //       msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
+  // }
+
+  // void _handlePaymentError(PaymentFailureResponse response) {
+  //   Fluttertoast.showToast(
+  //       msg: "ERROR HERE: ${response.code} - ${response.message}",
+  //       timeInSecForIosWeb: 4);
+  // }
+
+  // void _handleExternalWallet(ExternalWalletResponse response) {
+  //   Fluttertoast.showToast(
+  //       msg: "EXTERNAL_WALLET IS: ${response.walletName}",
+  //       timeInSecForIosWeb: 4);
+  // }
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   _razorpay = Razorpay();
+  //   _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+  //   _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+  //   _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  // }
+
+  // void makePayment() async {
+  //   var options = {
+  //     'key': 'rzp_test_NyShBXSTj3KSXP',
+  //     'amount': 20000, // Rs 200
+  //     'name': "Parth",
+  //     'description': 'iphone 12',
+  //     'prefill': {
+  //       'contact': "+91123456789",
+  //       'email': "patelparth@gmail.com",
+  //     }
+  //   };
+
+  //   try {
+  //     _razorpay.open(options);
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //   }
   // }
 
   @override
@@ -128,12 +177,17 @@ class _PaymentHistoryState extends State<PaymentHistory> {
       // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          // makePayment();
           showModalBottomSheet<void>(
               isScrollControlled: true,
               backgroundColor: Colors.transparent,
               context: context,
               builder: (BuildContext context) {
-                return PaymentSheet();
+                return Stack(
+                  children: [
+                    PaymentSheet(),
+                  ],
+                );
               });
           // showModalBottomSheet(
           //     context: context,
@@ -410,6 +464,55 @@ class _PaymentSheetState extends State<PaymentSheet> {
   final FocusNode _nodeEmail = FocusNode();
   TextEditingController strAmount = TextEditingController();
   TextEditingController strEmail = TextEditingController();
+
+  Razorpay _razorpay;
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    Fluttertoast.showToast(
+        msg: "SUCCESS PAYMENT: ${response.paymentId}", timeInSecForIosWeb: 4);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    Fluttertoast.showToast(
+        msg: "ERROR HERE: ${response.code} - ${response.message}",
+        timeInSecForIosWeb: 4);
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    Fluttertoast.showToast(
+        msg: "EXTERNAL_WALLET IS: ${response.walletName}",
+        timeInSecForIosWeb: 4);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  void makePayment() async {
+    var options = {
+      'key': 'rzp_test_NyShBXSTj3KSXP',
+      'amount': (int.parse(strAmount.text) * 100).toString(), // Rs 200
+      'name': "Parth",
+      'description': genderValue,
+      'prefill': {
+        'contact': "+91123456789",
+        'email': (strEmail.text).toString(),
+      }
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, state) {
@@ -488,6 +591,11 @@ class _PaymentSheetState extends State<PaymentSheet> {
                                       onChanged: (value) {
                                         setState(() {
                                           genderValue = value;
+                                          print(
+                                              'pppppppppppppppppppppppppppppppppp');
+                                          print(genderValue);
+                                          print(
+                                              'ppppppppppppppppppppppppppppppppppppppppp');
                                         });
                                       },
                                     ),
@@ -630,7 +738,12 @@ class _PaymentSheetState extends State<PaymentSheet> {
                                     width: MediaQuery.of(context).size.width *
                                         0.35,
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed:
+                                          // print(genderValue);
+                                          // print(strAmount.text);
+                                          _enableBtn
+                                              ? () => makePayment()
+                                              : null,
                                       child: Text(
                                         'START PAYMENT',
                                         style: TextStyle(
@@ -639,7 +752,9 @@ class _PaymentSheetState extends State<PaymentSheet> {
                                             color: Colors.white),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Color(0xFFFD5722),
+                                        primary: _enableBtn
+                                            ? Color(0xFFFD5722)
+                                            : Colors.grey,
                                       ),
                                     ),
                                   ),
@@ -651,6 +766,9 @@ class _PaymentSheetState extends State<PaymentSheet> {
                       ],
                     ),
                   ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom)),
                 ],
               ),
             );

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:axon/MyNavigationBar.dart';
-import 'package:axon/SelectAppointmentDate.dart';
 import 'package:axon/Utils/Loader.dart';
 import 'package:axon/Utils/SharePreference.dart';
 import 'package:axon/Utils/app_url.dart';
@@ -14,7 +13,6 @@ import 'PaymentHistory.dart';
 import 'Providers/HttpClient.dart';
 import 'Settings.dart';
 import 'Widgets.dart/OverlayDialogWarning.dart';
-import 'demo.dart';
 
 class Events extends StatefulWidget {
   const Events({Key key}) : super(key: key);
@@ -259,7 +257,18 @@ class _EventsState extends State<Events> {
                                 ),
                               ),
                               InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              AppointmentDetails(
+                                                  outputDate,
+                                                  doctorName,
+                                                  outputDate3,
+                                                  patientName,
+                                                  status)));
+                                },
                                 child: Icon(Icons.info_outline),
                               ),
                             ],

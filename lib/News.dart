@@ -406,7 +406,14 @@ class _NewsState extends State<News> {
                                 ),
                               ),
                               InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => NewsDetails(
+                                              token,
+                                              newsData[itemIndex]['newsId'])));
+                                },
                                 child: Container(
                                   child: Icon(Icons.info_outline),
                                 ),
