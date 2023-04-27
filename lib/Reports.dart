@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'MyNavigationBar.dart';
+import 'PaymentHistory.dart';
 import 'Settings.dart';
 import 'Widgets.dart/OverlayDialogWarning.dart';
 
@@ -92,6 +93,12 @@ class _ReportsState extends State<Reports> {
                         ),
                       ),
                       GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PaymentHistory()));
+                        },
                         child: Container(
                           margin: EdgeInsets.all(8),
                           height: 27,
@@ -119,20 +126,93 @@ class _ReportsState extends State<Reports> {
           ),
         ),
       ),
-      body: Center(
-        child: ElevatedButton(
-          child: const Text('showModalBottomSheet'),
-          onPressed: () {
-            showModalBottomSheet<void>(
-              isScrollControlled: true,
-              context: context,
-              builder: (BuildContext context) {
-                return DialogStatefull();
-              },
-            );
-          },
+      body: RefreshIndicator(
+        color: Colors.black,
+        backgroundColor: Colors.white,
+        strokeWidth: 2.0,
+        onRefresh: () async {
+          Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (a, b, c) => MyNavigationBar(selectedIndex),
+              transitionDuration: Duration(seconds: 2),
+            ),
+            // MaterialPageRoute(
+            //   builder: (context) => Events(),
+            // ),
+          );
+          // return Future.value(false);
+          await Future.delayed(Duration(seconds: 3));
+        },
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: Text(
+                        'Swipe down to refresh page',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Color(0XFF545454),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 120,
+                    ),
+                    Center(
+                      child: Image.asset(
+                        'images/axon.jpg',
+                        height: 90,
+                        width: 90,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                      child: Text(
+                        'You  don\'t have any recent prescriptions',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Color(0XFF545454),
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
+
+      // Center(
+      //   child: ElevatedButton(
+      //     child: const Text('showModalBottomSheet'),
+      //     onPressed: () {
+      //       showModalBottomSheet<void>(
+      //         isScrollControlled: true,
+      //         context: context,
+      //         builder: (BuildContext context) {
+      //           return DialogStatefull();
+      //         },
+      //       );
+      //     },
+      //   ),
+      // ),
     );
   }
 }
