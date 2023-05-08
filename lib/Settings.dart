@@ -1,6 +1,5 @@
 import 'package:axon/LoginPage.dart';
-import 'package:axon/News.dart';
-import 'package:axon/Utils/Loader.dart';
+
 import 'package:flutter/material.dart';
 
 import 'ChangeProvider.dart';
@@ -178,7 +177,7 @@ class _SettingsState extends State<Settings> {
                           Row(
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.64,
+                                width: MediaQuery.of(context).size.width * 0.68,
                                 child: Row(
                                   children: [
                                     Icon(Icons.person),
@@ -253,7 +252,7 @@ class _SettingsState extends State<Settings> {
                           Row(
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.64,
+                                width: MediaQuery.of(context).size.width * 0.68,
                                 height: 2,
                               ),
                               Container(

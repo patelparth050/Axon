@@ -30,4 +30,7 @@ class AppUrl {
   //Get Appointment History
   static const String getappointmenthistory =
       "BookAppointment/GetAppointmentHistory";
+
+  //Cancel Appointment
+  static const String cancelappointment = "BookAppointment/CancelAppointment";
 }

@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'FontSecond',
       ),
-      home: ChangeProvider(),
+      home: Splash(),
       // Calendar(),
     );
   }

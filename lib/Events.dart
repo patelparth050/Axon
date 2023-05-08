@@ -134,15 +134,23 @@ class _EventsState extends State<Events> {
     String doctorName = historyData[itemIndex]["doctorName"];
     String patientName = historyData[itemIndex]["name"];
     String status = historyData[itemIndex]["statusText"];
+    String appointmentId = historyData[itemIndex]["appointmentId"].toString();
     return Column(
       children: [
         InkWell(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => AppointmentDetails(outputDate,
-                        doctorName, outputDate3, patientName, status)));
+            status == 'Booked'
+                ? Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AppointmentDetails(
+                            outputDate,
+                            doctorName,
+                            outputDate3,
+                            patientName,
+                            status,
+                            appointmentId)))
+                : null;
           },
           child: Card(
             margin: EdgeInsets.all(5),
@@ -154,7 +162,7 @@ class _EventsState extends State<Events> {
                 Container(
                     height: 150,
                     width: MediaQuery.of(context).size.width * 0.25,
-                    color: Colors.green,
+                    color: status == 'Booked' ? Colors.green : Colors.grey,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -267,7 +275,8 @@ class _EventsState extends State<Events> {
                                                   doctorName,
                                                   outputDate3,
                                                   patientName,
-                                                  status)));
+                                                  status,
+                                                  appointmentId)));
                                 },
                                 child: Icon(Icons.info_outline),
                               ),
@@ -415,6 +424,7 @@ class _EventsState extends State<Events> {
         child: Stack(
           children: <Widget>[
             SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
               child: Padding(
                 padding: EdgeInsets.all(1),
                 child: Column(

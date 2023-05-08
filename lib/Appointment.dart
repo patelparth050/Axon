@@ -82,6 +82,152 @@ class _AppointmentState extends State<Appointment> {
   //     }
   //   });
   // }
+  _cancelAppointmentDetails() async {
+    setState(() {
+      isLoading = true;
+    });
+    var objsendotp = {
+      "customerToken": token,
+      "appointmentId": appointmentData['appointmentId'],
+    };
+
+    // print('>>>>>>>>>>');
+    // print(objsendotp);
+    // var appSignatureID = await SmsAutoFill().getAppSignature;
+
+    // Map objsendotp = {
+    //   "Mobile": strMobileNo.text,
+    //   "app_signature_id": appSignatureID
+    // };
+    print('>>>>>>>>>>');
+    print(objsendotp);
+    final Future<Map<String, dynamic>> successfulMessage =
+        HttpClient().postReq(AppUrl.cancelappointment, objsendotp);
+
+    await successfulMessage.then((response) {
+      print('>>>>>>>>>> BOOK APPOINTMENT <<<<<<<<');
+      print(response);
+      setState(() {
+        isLoading = false;
+      });
+      if (response['status'] == false) {
+        setState(() {
+          // appointmentData = response['data'];
+        });
+        print('77777777777777777777777777777777777777777777777777');
+        // print(appointmentData);
+        print('77777777777777777777777777777777777777777777777777');
+
+        // Flushbar(
+        //   message: 'Appointment Book Successfully',
+        //   duration: Duration(seconds: 5),
+        // ).show(context);
+        // // formKey.currentState.reset();
+
+        // Timer(
+        //     Duration(seconds: 1),
+        //     () => Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //             builder: (context) => Appointment(appointmentData))));
+        // Timer(Duration(seconds: 3), () {
+        //   // strName.clear();
+        //   // strBirthDate.clear();
+        //   // strMobileNo.clear();
+        // });
+      } else {
+        showDialog(
+            context: context,
+            builder: (_) => OverlayDialogWarning(
+                message: response['displayMessage'].toString(),
+                showButton: true,
+                dialogType: DialogType.Warning));
+      }
+    });
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text(
+        "Cancel",
+        style: TextStyle(
+          fontSize: 15,
+          color: Color(0xFFFD5722),
+        ),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text(
+        "Continue",
+        style: TextStyle(
+          fontSize: 15,
+          color: Color(0xFFFD5722),
+        ),
+      ),
+      onPressed: () {
+        showAlert(context);
+        _cancelAppointmentDetails();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Confirm"),
+      content: Text("Are you sure want to cancel Appointment?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  showAlert(BuildContext context) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: Text(
+        "OK",
+        style: TextStyle(
+          fontSize: 15,
+          color: Color(0xFFFD5722),
+        ),
+      ),
+      onPressed: () {
+        Navigator.of(context)
+          ..pop()
+          ..pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Alert"),
+      content: Text("Appointment cancelled"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     String date = appointmentData["apptDate"];
@@ -254,26 +400,34 @@ class _AppointmentState extends State<Appointment> {
                     ),
                     Row(
                       children: [
-                        Text(
-                          appointmentData['statusText'],
-                          // 'aaaa',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Color(0xFFFD5722),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.72,
+                          child: Text(
+                            appointmentData['statusText'],
+                            // 'aaaa',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Color(0xFFFD5722),
+                            ),
                           ),
                         ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.50,
-                        ),
+                        // SizedBox(
+                        //   width: MediaQuery.of(context).size.width * 0.60,
+                        // ),
                         TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'CANCEL',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Color(0xFFFD5722),
-                              ),
-                            ))
+                          onPressed: () {
+                            showAlertDialog(context);
+                          },
+                          child: appointmentData['statusText'] == 'Booked'
+                              ? Text(
+                                  'CANCEL',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Color(0xFFFD5722),
+                                  ),
+                                )
+                              : Container(),
+                        ),
                       ],
                     ),
                   ],
