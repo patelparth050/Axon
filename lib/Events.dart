@@ -446,7 +446,7 @@ class _EventsState extends State<Events> {
                         : Padding(
                             padding: EdgeInsets.all(15),
                             child: Container(
-                              height: 67.h,
+                              height: 68.h,
                               color: Colors.amber,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
