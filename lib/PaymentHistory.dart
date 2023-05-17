@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sizer/sizer.dart';
 
 class PaymentHistory extends StatefulWidget {
   const PaymentHistory({Key key}) : super(key: key);
@@ -46,7 +47,6 @@ class _PaymentHistoryState extends State<PaymentHistory> {
 
   // @override
   // void initState() {
-  //   // TODO: implement initState
   //   super.initState();
   //   _razorpay = Razorpay();
   //   _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
@@ -76,6 +76,8 @@ class _PaymentHistoryState extends State<PaymentHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
+
       key: scaffoldState,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60.0),
@@ -124,41 +126,26 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Center(
-                    child: Text(
-                      'Swipe down to refresh page',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Color(0XFF545454),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 120,
-                  ),
-                  Center(
-                    child: Image.asset(
-                      'images/axon.jpg',
-                      height: 90,
-                      width: 90,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 70,
-                  ),
-                  Center(
-                    child: Text(
-                      'You  don\'t have any Payment History',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 23,
-                          color: Color(0XFF545454),
-                          fontWeight: FontWeight.w600),
+                  Card(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 5.h,
+                          color: Color(0xFFFD5722),
+                        ),
+                        Container(
+                          height: 20.h,
+                          color: Colors.white,
+                          child: Column(
+                            children: [
+                              Text('ANIL KHIMJIBHI'),
+                              Text('Vaccination'),
+                              Text('Rs 500.0'),
+                              Text('11-May-2023'),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -714,7 +701,7 @@ class _PaymentSheetState extends State<PaymentSheet> {
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 17),
                                   ),
-                                  GestureDetector(
+                                  InkWell(
                                     onTap: () {},
                                     child: Text(
                                       'terms and conditions',
@@ -777,7 +764,6 @@ class _PaymentSheetState extends State<PaymentSheet> {
   }
 }
 
-
 // showModalBottomSheet(
 //     context: context,
 //     builder: (context) {
@@ -793,3 +779,64 @@ class _PaymentSheetState extends State<PaymentSheet> {
 //         );
 //       });
 // });
+
+// body: Stack(
+//         children: [
+//           SingleChildScrollView(
+//             physics: const AlwaysScrollableScrollPhysics(),
+//             child: Padding(
+//               padding: EdgeInsets.all(15),
+//               child: Column(
+//                 mainAxisAlignment: MainAxisAlignment.center,
+//                 crossAxisAlignment: CrossAxisAlignment.center,
+//                 children: [
+//                   SizedBox(
+//                     height: 10,
+//                   ),
+//                   Center(
+//                     child: Text(
+//                       'Swipe down to refresh page',
+//                       textAlign: TextAlign.center,
+//                       style: TextStyle(
+//                         fontSize: 20,
+//                         color: Color(0XFF545454),
+//                         fontWeight: FontWeight.w600,
+//                       ),
+//                     ),
+//                   ),
+//                   SizedBox(
+//                     height: 120,
+//                   ),
+//                   Center(
+//                     child: Image.asset(
+//                       'images/axon.jpg',
+//                       height: 90,
+//                       width: 90,
+//                     ),
+//                   ),
+//                   SizedBox(
+//                     height: 70,
+//                   ),
+//                   Center(
+//                     child: Text(
+//                       'You  don\'t have any Payment History',
+//                       textAlign: TextAlign.center,
+//                       style: TextStyle(
+//                           fontSize: 23,
+//                           color: Color(0XFF545454),
+//                           fontWeight: FontWeight.w600),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//           // FloatingActionButton(
+//           //   onPressed: () {
+//           //     _showSheet();
+//           //   },
+//           //   backgroundColor: Colors.green,
+//           //   child: Icon(Icons.add),
+//           // )
+//         ],
+//       ),

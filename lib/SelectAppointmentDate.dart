@@ -274,9 +274,7 @@
 //         ));
 //   }
 // }
-import 'package:axon/Book.dart';
 import 'package:axon/Utils/app_url.dart';
-import 'package:axon/Utils/colors_util.dart';
 import 'package:flutter/material.dart';
 
 import 'Providers/HttpClient.dart';
@@ -294,11 +292,11 @@ class SelectAppointmentDate extends StatefulWidget {
 }
 
 class _SelectAppointmentDateState extends State<SelectAppointmentDate> {
-  List appointmentData = List();
+  _SelectAppointmentDateState(this.selectedDocotrId);
+  List appointmentData = [];
   bool isLoading = false;
   String token;
   String selectedDocotrId;
-  _SelectAppointmentDateState(this.selectedDocotrId);
   bool isButtonActive = false;
   DateTime selectedDate = DateTime.now(); // TO tracking date
   DateTime defultDate = DateTime.now(); // TO tracking date
@@ -489,17 +487,17 @@ class _SelectAppointmentDateState extends State<SelectAppointmentDate> {
   }
 
   createNewsListContainer(BuildContext context, int itemIndex) {
-    var str = appointmentData[itemIndex]["displayTime"];
-    var str1 = appointmentData[itemIndex]["displayTime"];
-    // datetime1 == defultDate1 ? str : str1;
-    //  "displayTime": "4/21/2023 9:30:00 AM - 4/21/2023 10:00:00 AM",
-    var pte = datetime1 != defultDate1 ? str : str1;
-    print('object');
-    print(pte);
-    print('object');
-    print(timingId);
-    var parts = pte.split(' ');
-    var prefix = parts[1].trim();
+    // var str = appointmentData[itemIndex]["displayTime"];
+    // var str1 = appointmentData[itemIndex]["displayTime"];
+    // // datetime1 == defultDate1 ? str : str1;
+    // //  "displayTime": "4/21/2023 9:30:00 AM - 4/21/2023 10:00:00 AM",
+    // var pte = datetime1 != defultDate1 ? str : str1;
+    // print('object');
+    // print(pte);
+    // print('object');
+    // print(timingId);
+    // var parts = pte.split(' ');
+    // var prefix = parts[1].trim();
     // + parts[2].trim()
     // + parts[3].trim() + parts[5].trim()
     // parts[6].trim()
@@ -509,6 +507,48 @@ class _SelectAppointmentDateState extends State<SelectAppointmentDate> {
     //     parts[14].trim() +
     //     parts[19].trim() +
     //     parts[20].trim();
+
+//============================================================================================================
+
+    String date = appointmentData[itemIndex]["fromTimeSlotLocal"];
+    DateTime parseDate = new DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date);
+    var inputDate = DateTime.parse(parseDate.toString());
+    var outputFormat = DateFormat('E d-MMMM-yyyy');
+    var outputFormat1 = DateFormat('E,yyyy');
+    var outputFormat2 = DateFormat('d MMM');
+    var outputFormat3 = DateFormat('hh:mm a');
+    // var outputFormat = DateFormat('MM/dd/yyyy hh:mm a');
+    var outputDate = outputFormat.format(inputDate);
+    var outputDate1 = outputFormat1.format(inputDate);
+    var outputDate2 = outputFormat2.format(inputDate);
+    var outputDate3 = outputFormat3.format(inputDate);
+    print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+    print(outputDate);
+    print(outputDate1);
+    print(outputDate2);
+    print(outputDate3);
+    print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+
+    String date1 = appointmentData[itemIndex]["toTimeSlotLocal"];
+    DateTime parseDate1 = new DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date1);
+    var inputDate1 = DateTime.parse(parseDate1.toString());
+    var outputFormat10 = DateFormat('E d-MMMM-yyyy');
+    var outputFormat11 = DateFormat('E,yyyy');
+    var outputFormat12 = DateFormat('d MMM');
+    var outputFormat13 = DateFormat('hh:mm a');
+    // var outputFormat = DateFormat('MM/dd/yyyy hh:mm a');
+    var outputDate10 = outputFormat10.format(inputDate1);
+    var outputDate11 = outputFormat11.format(inputDate1);
+    var outputDate12 = outputFormat12.format(inputDate1);
+    var outputDate13 = outputFormat13.format(inputDate1);
+    print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+    print(outputDate10);
+    print(outputDate11);
+    print(outputDate12);
+    print(outputDate13);
+    print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+//=============================================================================================================================
+
     int capacity = appointmentData[itemIndex]["capacity"];
     int count = appointmentData[itemIndex]["count"];
 
@@ -540,7 +580,7 @@ class _SelectAppointmentDateState extends State<SelectAppointmentDate> {
                       borderRadius: BorderRadius.circular(2),
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.grey[400],
+                            color: Colors.grey.shade400,
                             offset: Offset(3, 3),
                             blurRadius: 5)
                       ],
@@ -552,8 +592,8 @@ class _SelectAppointmentDateState extends State<SelectAppointmentDate> {
                     children: [
                       SizedBox(height: 10),
                       Text(
-                        datetime1 == defultDate1 ? str : prefix,
-
+                        // datetime1 == defultDate1 ? str : prefix,
+                        outputDate3 + ' - ' + outputDate13,
                         // appointmentData[itemIndex]["displayTime"],
                         // listOftimeslot[itemIndex],
                         style: TextStyle(
@@ -617,8 +657,8 @@ class _SelectAppointmentDateState extends State<SelectAppointmentDate> {
                   children: [
                     SizedBox(height: 10),
                     Text(
-                      datetime1 == defultDate1 ? str : prefix,
-
+                      // datetime1 == defultDate1 ? str : prefix,
+                      outputDate3 + ' - ' + outputDate13,
                       // datetime1 == defultDate1
                       //     ? appointmentData[itemIndex]["displayTime"]
                       //     : prefix,
@@ -637,7 +677,7 @@ class _SelectAppointmentDateState extends State<SelectAppointmentDate> {
         SizedBox(
           height: 15,
         ),
-        isLoading ? Loader() : Container(),
+        isLoading ? Container() : Container(),
       ],
     );
   }

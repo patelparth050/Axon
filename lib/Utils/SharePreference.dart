@@ -38,6 +38,16 @@ class UserPreferences {
         : prefs.getBool("isLoggedIn");
   }
 
+  Future<List> getDoctor() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList("access_doctor");
+  }
+
+  void setDoctor(List args) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setStringList("access_doctor", args);
+  }
+
   void logoutProcess() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove("isLoggedIn");

@@ -1,5 +1,10 @@
-import 'package:axon/Settings.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
+
+import 'Providers/HttpClient.dart';
+import 'Utils/SharePreference.dart';
+import 'Utils/app_url.dart';
+import 'Widgets.dart/OverlayDialogWarning.dart';
 
 enum ProductTypeEnum { Male, Female }
 
@@ -11,21 +16,253 @@ class SelectPatient extends StatefulWidget {
 }
 
 class _SelectPatientState extends State<SelectPatient> {
+  UserPreferences userPreference = UserPreferences();
+  String mobile;
+  bool isLoading = false;
   String genderValue;
   String CaseNo = "New";
-
+  List patientData = [];
+  List patientById = [];
   final formKey = GlobalKey<FormState>();
   final FocusNode _nodeName = FocusNode();
   final FocusNode _nodeBirth = FocusNode();
+  final FocusNode _nodePatientId = FocusNode();
   TextEditingController strName = TextEditingController();
   TextEditingController strBirthDate = TextEditingController();
+  TextEditingController strPatientId = TextEditingController();
   bool _enableBtn = false;
+
+  @override
+  void initState() {
+    userPreference.getMobile().then((value1) {
+      setState(() {
+        mobile = value1;
+      });
+      setState(() {
+        _getReportList();
+      });
+    });
+
+    // super.initState();
+    super.initState();
+  }
+
+  _getReportList() async {
+    print("Call GetCustomerTokenByAppCode method");
+    print('00000000000000000000000000000000000000000000');
+    print(mobile);
+    print('0000000000000000000000000000000000000000000');
+    FocusScope.of(context).unfocus(); // Used foe dismiss keyboard
+    setState(() {
+      isLoading = true;
+    });
+    // var obj = {
+    //   "customerToken": token,
+    //   // "68cb311f-585a-4e86-8e89-06edf1814080": token,
+    // };
+    print('>>>>>>>>>>');
+    // print(obj);
+
+    final Future<Map<String, dynamic>> successfulMessage = HttpClient()
+        .getReq(AppUrl.getpatienthistory + "?Mobile=" + "7567444375");
+
+    await successfulMessage.then((response) {
+      print('>>>>>>>>>> Get Data <<<<<<<<');
+      print(response);
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (response['status'] == true) {
+        setState(() {
+          patientData = response['data'];
+        });
+        print(">>>>>>>>>>>>>>");
+        print(patientData);
+      } else {
+        showDialog(
+            context: context,
+            builder: (_) => OverlayDialogWarning(
+                message: response['message'].toString(),
+                showButton: true,
+                dialogType: DialogType.Warning));
+      }
+    });
+  }
+
+  _getPatientBYId() async {
+    print("Call GetCustomerTokenByAppCode method");
+    print('00000000000000000000000000000000000000000000');
+    // print(mobile);
+    print('0000000000000000000000000000000000000000000');
+    FocusScope.of(context).unfocus(); // Used foe dismiss keyboard
+    setState(() {
+      isLoading = true;
+    });
+    // var obj = {
+    //   "customerToken": token,
+    //   // "68cb311f-585a-4e86-8e89-06edf1814080": token,
+    // };
+    print('>>>>>>>>>>');
+    print(strPatientId.text);
+
+    final Future<Map<String, dynamic>> successfulMessage = HttpClient()
+        .getReq(AppUrl.getpatientbyid + "?caseno=" + strPatientId.text);
+
+    await successfulMessage.then((response) {
+      print('>>>>>>>>>> Get Data <<<<<<<<');
+      print(response);
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (response['status'] == true) {
+        setState(() {
+          patientById = response['data'];
+        });
+        print(">>>>>>>>>>>>>>");
+        print(patientById);
+      } else {
+        showDialog(
+            context: context,
+            builder: (_) => OverlayDialogWarning(
+                message: response['message'].toString(),
+                showButton: true,
+                dialogType: DialogType.Warning));
+      }
+    });
+  }
+
+  createPatientListContainer(BuildContext context, int itemIndex) {
+    // final notificationObj = listOfColumns[itemIndex];
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            //   Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //           builder: (context) =>
+            //               ReportDetails(reportData[itemIndex])));
+          },
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Container(
+                    width: 25.w,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(patientData[itemIndex]['case_no'].toString()),
+                        Container(
+                          child: Icon(Icons.person),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(patientData[itemIndex]['patient_name']),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(patientData[itemIndex]['patient_mobile']),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(patientData[itemIndex]['patient_dob']),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // SizedBox(
+        //   height: 20,
+        // ),
+      ],
+    );
+  }
+
+  createPatientByIdContainer(BuildContext context, int itemIndex) {
+    // final notificationObj = listOfColumns[itemIndex];
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            //   Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //           builder: (context) =>
+            //               ReportDetails(reportData[itemIndex])));
+          },
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Container(
+                    width: 25.w,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(patientById[itemIndex]['case_no'].toString()),
+                        Container(
+                          child: Icon(Icons.person),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(patientById[itemIndex]['patient_name']),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(patientById[itemIndex]['patient_mobile']),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(patientById[itemIndex]['patient_dob']),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // SizedBox(
+        //   height: 20,
+        // ),
+      ],
+    );
+  }
+
+  List _foundUsers = [];
+
+  // @override
+  // initState() {
+  //   _foundUsers = _allUsers;
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        backgroundColor: Colors.grey.shade200,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           centerTitle: false,
@@ -83,46 +320,16 @@ class _SelectPatientState extends State<SelectPatient> {
                   child: Padding(
                     padding: EdgeInsets.all(15),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Center(
-                          child: Text(
-                            'Swipe down to refresh page',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Color(0XFF545454),
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 120,
-                        ),
-                        Center(
-                          child: Image.asset(
-                            'images/orderbag.png',
-                            height: 90,
-                            width: 90,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Center(
-                          child: Text(
-                            'Oops. You  haven\'t registered any Patient yet.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Color(0XFF545454),
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
+                        ListView.builder(
+                            padding: EdgeInsets.only(bottom: 10),
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: patientData.length,
+                            itemBuilder: (BuildContext context, int itemIndex) {
+                              return createPatientListContainer(
+                                  context, itemIndex);
+                            }),
                       ],
                     ),
                   ),
@@ -295,17 +502,30 @@ class _SelectPatientState extends State<SelectPatient> {
                   child: Padding(
                     padding: EdgeInsets.all(15),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          height: 10,
-                        ),
                         TextFormField(
+                            onFieldSubmitted: (value) {
+                              setState(() {
+                                strPatientId.text = value;
+                                print('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+                                print(value);
+                                print(strPatientId.text);
+                                print('qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+                                _getPatientBYId();
+                              });
+                            },
+                            // onTap: () {
+                            //   setState(() {
+                            //     _getPatientBYId();
+                            //   });
+                            // },
+                            // focusNode: _nodePatientId,
                             scrollPadding: EdgeInsets.only(bottom: 60),
                             keyboardType: TextInputType.text,
-                            validator: (value) =>
-                                value.isEmpty ? "Please enter full name" : null,
+                            // validator: (value) =>
+                            //     value.isEmpty ? "Please enter full name" : null,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             textInputAction: TextInputAction.next,
@@ -323,27 +543,81 @@ class _SelectPatientState extends State<SelectPatient> {
                                   )),
                             )),
                         SizedBox(
-                          height: 150,
+                          height: 10,
                         ),
-                        Center(
-                          child: Image.asset(
-                            'images/orderbag.png',
-                            height: 90,
-                            width: 90,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Center(
-                          child: Text(
-                            'Please enter your Unique id to search for Patients.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Color(0XFF545454),
-                                fontWeight: FontWeight.w600),
-                          ),
+                        Container(
+                          child: patientById.isNotEmpty
+                              ? InkWell(
+                                  onTap: () {
+                                    //   Navigator.push(
+                                    //       context,
+                                    //       MaterialPageRoute(
+                                    //           builder: (context) =>
+                                    //               ReportDetails(reportData[itemIndex])));
+                                  },
+                                  child: Card(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 25.w,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Text(patientById[0]['case_no']
+                                                    .toString()),
+                                                Container(
+                                                  child: Icon(Icons.person),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(patientById[0]
+                                                    ['patient_name']),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(patientById[0]
+                                                    ['patient_mobile']),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(patientById[0]
+                                                    ['patient_dob']),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  height: 60.h,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.abc,
+                                        size: 100,
+                                      ),
+                                      Text(
+                                        'Please enter your Unique Id to search for Patients.',
+                                        style: TextStyle(fontSize: 18.sp),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                         ),
                       ],
                     ),
@@ -357,3 +631,56 @@ class _SelectPatientState extends State<SelectPatient> {
     );
   }
 }
+
+// Stack(
+//               children: [
+//                 SingleChildScrollView(
+//                   child: Padding(
+//                     padding: EdgeInsets.all(15),
+//                     child: Column(
+//                       mainAxisAlignment: MainAxisAlignment.center,
+//                       crossAxisAlignment: CrossAxisAlignment.center,
+//                       children: [
+//                         SizedBox(
+//                           height: 10,
+//                         ),
+//                         Center(
+//                           child: Text(
+//                             'Swipe down to refresh page',
+//                             textAlign: TextAlign.center,
+//                             style: TextStyle(
+//                               fontSize: 20,
+//                               color: Color(0XFF545454),
+//                               fontWeight: FontWeight.w600,
+//                             ),
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: 120,
+//                         ),
+//                         Center(
+//                           child: Image.asset(
+//                             'images/orderbag.png',
+//                             height: 90,
+//                             width: 90,
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: 20,
+//                         ),
+//                         Center(
+//                           child: Text(
+//                             'Oops. You  haven\'t registered any Patient yet.',
+//                             textAlign: TextAlign.center,
+//                             style: TextStyle(
+//                                 fontSize: 20,
+//                                 color: Color(0XFF545454),
+//                                 fontWeight: FontWeight.w600),
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//               ],
+//             ),

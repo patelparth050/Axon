@@ -6,6 +6,7 @@ import 'package:axon/Utils/SharePreference.dart';
 import 'package:axon/Utils/app_url.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'AppointmentDetails.dart';
@@ -25,7 +26,7 @@ class _EventsState extends State<Events> {
   UserPreferences userPreference = UserPreferences();
   String token;
   bool isLoading = false;
-  List historyData = List();
+  List historyData = [];
   int selectedIndex = 2;
 
   // var historyData;
@@ -359,7 +360,7 @@ class _EventsState extends State<Events> {
                   width: MediaQuery.of(context).size.width * 0.34,
                   child: Row(
                     children: [
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           whatsapp();
                         },
@@ -369,7 +370,7 @@ class _EventsState extends State<Events> {
                           child: Image.asset('images/whatsapp.png'),
                         ),
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.push(
                               context,
@@ -382,7 +383,7 @@ class _EventsState extends State<Events> {
                           child: Image.asset('images/rupee.png'),
                         ),
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.push(
                               context,
@@ -432,15 +433,66 @@ class _EventsState extends State<Events> {
                     SizedBox(
                       height: 10,
                     ),
-                    ListView.builder(
-                        padding: EdgeInsets.only(bottom: 10),
-                        physics: ClampingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: historyData.length,
-                        itemBuilder: (BuildContext context, int itemIndex) {
-                          return createAppointmentListContainer(
-                              context, itemIndex);
-                        }),
+                    historyData.isNotEmpty
+                        ? ListView.builder(
+                            padding: EdgeInsets.only(bottom: 10),
+                            physics: ClampingScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: historyData.length,
+                            itemBuilder: (BuildContext context, int itemIndex) {
+                              return createAppointmentListContainer(
+                                  context, itemIndex);
+                            })
+                        : Padding(
+                            padding: EdgeInsets.all(15),
+                            child: Container(
+                              height: 67.h,
+                              color: Colors.amber,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'Swipe down to refresh page',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Color(0XFF545454),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 120,
+                                  ),
+                                  Center(
+                                    child: Image.asset(
+                                      'images/axon.jpg',
+                                      height: 90,
+                                      width: 90,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      'You  don\'t have any bookings or upcoming events',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color(0XFF545454),
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                     // newsCardWidget(),
                   ],
                 ),

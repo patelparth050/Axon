@@ -118,7 +118,7 @@ class HttpClient with ChangeNotifier {
       try {
         result = responseData;
       } catch (err) {
-        Singleton().printMessage(err.runTimeType);
+        Singleton().printMessage(err.runtimeType);
       }
     }
     // else if (response.statusCode == 401) {

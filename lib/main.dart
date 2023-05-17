@@ -1,15 +1,8 @@
-import 'package:axon/LoginPage.dart';
-import 'package:axon/MyNavigationBar.dart';
-import 'package:axon/config.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
-import 'Aaa.dart';
 import 'ChangeProvider.dart';
-import 'News.dart';
-import 'OTPVerify.dart';
-import 'SelectAppointmentDate.dart';
-import 'Splash.dart';
-import 'demo.dart';
+import 'Utils/colors_util.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,14 +11,16 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Axon',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'FontSecond',
-      ),
-      home: Splash(),
-      // Calendar(),
-    );
+    return Sizer(builder: (context, orientation, DeviceType) {
+      return MaterialApp(
+        title: 'Axon',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: AppPrimaryColor,
+        ),
+        home: ChangeProvider(),
+        // Calendar(),
+      );
+    });
   }
 }

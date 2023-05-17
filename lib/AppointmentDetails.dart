@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 
 import 'Providers/HttpClient.dart';

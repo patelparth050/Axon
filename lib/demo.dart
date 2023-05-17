@@ -343,7 +343,7 @@ class _CalendarState extends State<Calendar> {
                               borderRadius: BorderRadius.circular(2),
                               boxShadow: [
                                 BoxShadow(
-                                    color: Colors.grey[400],
+                                    color: Colors.grey.shade400,
                                     offset: Offset(3, 3),
                                     blurRadius: 5)
                               ],

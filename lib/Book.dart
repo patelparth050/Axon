@@ -1,12 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:axon/Appointment.dart';
 import 'package:axon/Utils/Loader.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'Models/doctors_data.dart';
 import 'PaymentHistory.dart';
 import 'Providers/HttpClient.dart';
 import 'SelectAppointmentDate.dart';
@@ -28,7 +30,9 @@ class _BookState extends State<Book> {
   String token;
   String mobile;
   bool isLoading = false;
-  List doctorData = List();
+  List doctorData = [];
+  List customerData = [];
+
   int doctorId;
   List _myJson = [];
   String displayDate = 'Select Appointment Date';
@@ -40,6 +44,7 @@ class _BookState extends State<Book> {
   String displaytimingId;
   String selectedDocotrId;
   var appointmentData;
+  String number;
 
   // final _productSizesList = ["Dr. John Smith", "Dr. Demo Gynac"];
   String _selectedVal = "";
@@ -57,14 +62,17 @@ class _BookState extends State<Book> {
         token = value;
       });
       setState(() {
-        _getCategory();
+        _getDoctorList();
+      });
+      setState(() {
+        _getDoctorDetails();
       });
     });
     // super.initState();
     super.initState();
   }
 
-  _getCategory() async {
+  _getDoctorList() async {
     print("Call GetCustomerTokenByAppCode method");
     print('00000000000000000000000000000000000000000000');
     print(mobile);
@@ -110,10 +118,57 @@ class _BookState extends State<Book> {
           _myJson = response['data'];
 
           doctorId = doctorData[0]['doctorId'];
+          number = customerData[0]['customerContact'];
         });
         print(">>>>>>>>>>>>>>");
         print(doctorData);
         print(doctorId);
+      } else {
+        showDialog(
+            context: context,
+            builder: (_) => OverlayDialogWarning(
+                message: response['message'].toString(),
+                showButton: true,
+                dialogType: DialogType.Warning));
+      }
+    });
+  }
+
+  _getDoctorDetails() async {
+    print("Call GetDoctorDetailsByToken method");
+
+    FocusScope.of(context).unfocus(); // Used foe dismiss keyboard
+    setState(() {
+      isLoading = true;
+    });
+    var obj = {
+      "customerToken": token,
+      // "68cb311f-585a-4e86-8e89-06edf1814080": token,
+    };
+    print('>>>>>>>>>>');
+    print(obj);
+
+    final Future<Map<String, dynamic>> successfulMessage = HttpClient().getReq(
+        AppUrl.getcustomerdetails + "?CustomerToken=" + token.toString());
+
+    await successfulMessage.then((response) {
+      print('>>>>>>>>>> Get Data <<<<<<<<');
+      print(response);
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (response['status'] == true) {
+        setState(() {
+          customerData = response['data'];
+          // _myJson = response['data'];
+
+          // doctorId = doctorData[0]['doctorId'];
+        });
+        print(">>>>>>>>>>>>>>");
+        print(customerData);
+        // print(doctorId);
       } else {
         showDialog(
             context: context,
@@ -247,6 +302,7 @@ class _BookState extends State<Book> {
                 Container(
                   height: 69,
                   width: MediaQuery.of(context).size.width * 0.10,
+                  // child: Image.asset('images/axon-icon.png'),
                   child: Image.asset('images/axon-icon.png'),
                 ),
                 Container(
@@ -266,7 +322,7 @@ class _BookState extends State<Book> {
                   width: MediaQuery.of(context).size.width * 0.34,
                   child: Row(
                     children: [
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           whatsapp();
                         },
@@ -276,7 +332,7 @@ class _BookState extends State<Book> {
                           child: Image.asset('images/whatsapp.png'),
                         ),
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.push(
                               context,
@@ -289,7 +345,7 @@ class _BookState extends State<Book> {
                           child: Image.asset('images/rupee.png'),
                         ),
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.push(
                               context,
@@ -315,287 +371,351 @@ class _BookState extends State<Book> {
           SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(0),
-              child: Column(
-                children: [
-                  Card(
-                    child: Image.asset(
-                      "images/c5.png",
-                    ),
-                  ),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    margin: EdgeInsets.all(5),
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
+              child: isLoading
+                  ? isLoading
+                      ? Container()
+                      : Container()
+                  : Column(
+                      children: [
                         Container(
-                          padding: EdgeInsets.all(8),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Provider',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.grey.shade700),
+                            height: 25.h,
+                            width: 100.w,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: MemoryImage(
+                                  base64Decode(customerData[0]['logoImageURL']),
+                                ),
+                                // image: NetworkImage(
+                                //   customerData[0]['logoImageURL'],
+                                // ),
+                                // image: AssetImage('images/c5.png'),
+                                fit: BoxFit.cover,
                               ),
-                              SizedBox(height: 30),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                color: Colors.white,
-                                child: DropdownButtonHideUnderline(
-                                  child: ButtonTheme(
-                                    alignedDropdown: true,
-                                    child: DropdownButton<String>(
-                                      isDense: true,
-                                      hint: new Text(
-                                        "Select Doctor",
-                                        // _myJson[0]['doctorName'].toString(),
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          customerData[0]['customerName'],
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white),
+                                        ),
+                                        Text(
+                                          customerData[0]['customerAddress'],
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      number == null
+                                          ? null
+                                          : launch('tel://$number');
+                                    },
+                                    child: Container(
+                                      height: 40,
+                                      child: Image.asset(
+                                        "images/phone-call.png",
                                       ),
-                                      value: selectedDocotrId,
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          selectedDocotrId = newValue;
-                                        });
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
+                        Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          margin: EdgeInsets.all(5),
+                          color: Colors.white,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Provider',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey.shade700),
+                                    ),
+                                    SizedBox(height: 30),
+                                    Container(
+                                      alignment: Alignment.centerLeft,
+                                      color: Colors.white,
+                                      child: DropdownButtonHideUnderline(
+                                        child: ButtonTheme(
+                                          alignedDropdown: true,
+                                          child: DropdownButton<String>(
+                                            isDense: true,
+                                            hint: Text(
+                                              "Select Doctor",
+                                              // _myJson[0]['doctorName'].toString(),
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.black),
+                                            ),
+                                            value: selectedDocotrId,
+                                            onChanged: (String newValue) {
+                                              setState(() {
+                                                selectedDocotrId = newValue;
+                                              });
 
-                                        print(selectedDocotrId);
-                                      },
-                                      items: _myJson.map((map) {
-                                        return new DropdownMenuItem<String>(
-                                          value: map["doctorId"].toString(),
-                                          // value: _mySelection,
-                                          child: Row(
-                                            children: <Widget>[
-                                              Container(
-                                                  // width: 249,
-                                                  margin:
-                                                      EdgeInsets.only(left: 10),
-                                                  child: Text(
-                                                    map["doctorName"],
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  )),
-                                            ],
+                                              print(selectedDocotrId);
+                                            },
+                                            items: _myJson.map((map) {
+                                              return new DropdownMenuItem<
+                                                  String>(
+                                                value:
+                                                    map["doctorId"].toString(),
+                                                // value: _mySelection,
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    Container(
+                                                        // width: 249,
+                                                        margin: EdgeInsets.only(
+                                                            left: 10),
+                                                        child: Text(
+                                                          map["doctorName"],
+                                                          style: TextStyle(
+                                                              fontSize: 20,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        )),
+                                                  ],
+                                                ),
+                                              );
+                                            }).toList(),
                                           ),
-                                        );
-                                      }).toList(),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    color: Color(0xFFFD5722),
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(8),
+                                        bottomRight: Radius.circular(8))),
+                                height: 110,
+                                width: 63,
+                                child: Icon(
+                                  Icons.punch_clock,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                              ),
+                              // isLoading ? Loader() : Container(),
+                            ],
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            selectedDocotrId != null
+                                ?
+                                //   Navigator.push(
+                                //       context,
+                                //       MaterialPageRoute(
+                                //           builder: (context) =>
+                                //               SelectAppointmentDate(selectedDocotrId)));
+                                _navigateDateAndTimeSelaction(context)
+                                : showDialog(
+                                    context: context,
+                                    builder: (_) => OverlayDialogWarning(
+                                        message: 'Please Select a Doctor',
+                                        // message: response['message'].toString(),
+                                        showButton: true,
+                                        dialogType: DialogType.Warning));
+                            ;
+                          },
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            margin: EdgeInsets.all(5),
+                            color: Colors.white,
+                            // shadowColor: Colors.white,
+                            // // shape: RoundedRectangleBorder(
+                            // //     borderRadius: BorderRadius.all(Radius.circular(5))),
+                            // elevation: 10,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 20),
+                                        Container(
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            displayDate,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                        SizedBox(height: 10),
+                                        Container(
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            displayTimeSlot,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFFFD5722),
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(8),
+                                          bottomRight: Radius.circular(8))),
+                                  height: 110,
+                                  width: 63,
+                                  child: Icon(
+                                    Icons.punch_clock,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => SelectPatient()));
+                            _navigateNameAndGenderSelaction(context);
+                          },
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            margin: EdgeInsets.only(left: 5, right: 5, top: 5),
+                            color: Colors.white,
+                            shadowColor: Colors.white,
+                            // shape: RoundedRectangleBorder(
+                            //     borderRadius: BorderRadius.all(Radius.circular(5))),
+                            elevation: 10,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Text(
+                                            // 'Select Patient',
+                                            displayPatientName,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                        //
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Color(0xFFFD5722),
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(8),
+                                          bottomRight: Radius.circular(8))),
+                                  height: 110,
+                                  width: 63,
+                                  child: Icon(
+                                    Icons.person,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  _bookAppointment();
+                                },
+                                child: Text(
+                                  'BOOK APPOINTMENT',
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Color(0xFFFD5722)),
                               ),
-                              SizedBox(height: 20),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    displayDate = 'Select Appointment Date';
+                                    displayTimeSlot = '';
+                                    displaytimingId = '';
+                                    displayPatientName = 'Select Patient';
+                                    displayBirthDate = '';
+                                    displayGender = '';
+                                  });
+                                },
+                                child: Text('RESET'),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Color(0xFFFD5722)),
+                              ),
                             ],
                           ),
                         ),
                         Container(
-                          decoration: BoxDecoration(
-                              color: Color(0xFFFD5722),
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(8),
-                                  bottomRight: Radius.circular(8))),
-                          height: 110,
-                          width: 63,
-                          child: Icon(
-                            Icons.punch_clock,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                        ),
-                        // isLoading ? Loader() : Container(),
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      selectedDocotrId != null
-                          ?
-                          //   Navigator.push(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //           builder: (context) =>
-                          //               SelectAppointmentDate(selectedDocotrId)));
-                          _navigateDateAndTimeSelaction(context)
-                          : showDialog(
-                              context: context,
-                              builder: (_) => OverlayDialogWarning(
-                                  message: 'Please Select a Doctor',
-                                  // message: response['message'].toString(),
-                                  showButton: true,
-                                  dialogType: DialogType.Warning));
-                      ;
-                    },
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      margin: EdgeInsets.all(5),
-                      color: Colors.white,
-                      // shadowColor: Colors.white,
-                      // // shape: RoundedRectangleBorder(
-                      // //     borderRadius: BorderRadius.all(Radius.circular(5))),
-                      // elevation: 10,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(height: 20),
-                                  Container(
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      displayDate,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Container(
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      displayTimeSlot,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Color(0xFFFD5722),
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(8),
-                                    bottomRight: Radius.circular(8))),
-                            height: 110,
-                            width: 63,
-                            child: Icon(
-                              Icons.punch_clock,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => SelectPatient()));
-                      _navigateNameAndGenderSelaction(context);
-                    },
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      margin: EdgeInsets.only(left: 5, right: 5, top: 5),
-                      color: Colors.white,
-                      shadowColor: Colors.white,
-                      // shape: RoundedRectangleBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(5))),
-                      elevation: 10,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      // 'Select Patient',
-                                      displayPatientName,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                  //
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Color(0xFFFD5722),
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(8),
-                                    bottomRight: Radius.circular(8))),
-                            height: 110,
-                            width: 63,
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            _bookAppointment();
-                          },
-                          child: Text(
-                            'BOOK APPOINTMENT',
-                          ),
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFFD5722)),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              displayDate = 'Select Appointment Date';
-                              displayTimeSlot = '';
-                              displaytimingId = '';
-                              displayPatientName = 'Select Patient';
-                              displayBirthDate = '';
-                              displayGender = '';
-                            });
-                          },
-                          child: Text('RESET'),
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFFD5722)),
+                          height: 180,
                         ),
                       ],
                     ),
-                  ),
-                  Container(
-                    height: 180,
-                  ),
-                ],
-              ),
             ),
           ),
           isLoading ? Loader() : Container(),

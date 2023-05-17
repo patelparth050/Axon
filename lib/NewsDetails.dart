@@ -1,4 +1,3 @@
-import 'package:axon/SelectAppointmentDate.dart';
 import 'package:axon/Utils/Loader.dart';
 import 'package:axon/Utils/app_url.dart';
 import 'package:flutter/material.dart';
@@ -102,7 +101,7 @@ class _NewsDetailsState extends State<NewsDetails> {
           elevation: 0,
           backgroundColor: Color(0xffffffff),
           leading: Padding(
-            padding: EdgeInsets.only(top: 20),
+            padding: EdgeInsets.only(top: 5.0),
             child: IconButton(
               color: Colors.black,
               onPressed: () {
@@ -113,7 +112,7 @@ class _NewsDetailsState extends State<NewsDetails> {
           ),
           title: Padding(
             padding: EdgeInsets.only(
-              top: 16.0,
+              top: 5.0,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,7 +121,8 @@ class _NewsDetailsState extends State<NewsDetails> {
                   "News Details",
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 25,
+                    // fontWeight: FontWeight.bold,
+                    fontSize: 22,
                   ),
                 ),
               ],
@@ -137,7 +137,7 @@ class _NewsDetailsState extends State<NewsDetails> {
                 padding: const EdgeInsets.all(8.0),
                 child: isLoading
                     ? isLoading
-                        ? Loader()
+                        ? Container()
                         : Container()
                     : Column(
                         children: [

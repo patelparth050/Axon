@@ -17,10 +17,10 @@ class OverlayDialogWarning extends StatefulWidget {
   String message = "";
 
   /// isBack default value false
-  bool isBack = false;
+  final bool isBack;
 
   /// showButton default value false
-  bool showButton = false;
+  final bool showButton;
 
   /// DialogType dialogType = Default is Success
   DialogType dialogType;
@@ -28,8 +28,8 @@ class OverlayDialogWarning extends StatefulWidget {
   // bool isSuccess = false;
   OverlayDialogWarning({
     @required this.message,
-    this.isBack,
-    this.showButton,
+    this.isBack = false,
+    this.showButton = false,
     this.dialogType = DialogType.Success,
     // @optionalTypeArgs this.isSuccess
   });

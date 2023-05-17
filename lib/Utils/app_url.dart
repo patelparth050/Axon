@@ -17,7 +17,10 @@ class AppUrl {
   //Get News Details
   static const String getnewsdetails = "NewsFeed/GetNewsDetails";
 
-  //Get Doctor Details
+  //Get Customer Details
+  static const String getcustomerdetails = "BookAppointment/GetCustomer";
+
+  //Get Doctor
   static const String getdoctordetails = "BookAppointment/GetCustomerDoctor";
 
   //Get Appointmentstimeslot
@@ -33,4 +36,14 @@ class AppUrl {
 
   //Cancel Appointment
   static const String cancelappointment = "BookAppointment/CancelAppointment";
+
+  //Get Rx Visit History
+  static const String getrxvisithistory = "BookAppointment/GetRxVisitHistory";
+
+  //Get Patient By MobileNo
+  static const String getpatienthistory =
+      "BookAppointment/GetPatientByMobileNo";
+
+  //Get Patient By Caseno
+  static const String getpatientbyid = "BookAppointment/GetPatientByCaseno";
 }

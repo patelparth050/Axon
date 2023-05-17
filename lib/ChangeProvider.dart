@@ -76,7 +76,15 @@ class _ChangeProviderState extends State<ChangeProvider> {
           //  data = [response['data']['token']];
           // Map<String, dynamic> user = response['data']['token'];
           userPreference.setToken((response["data"]["token"]));
+          userPreference.setDoctor(([
+            response["data"]["token"].toString(),
+            strAppcode.text.toString()
+          ]
+              // response["data"]["token"].toString(),
+              // strAppcode.text.toString()
+              ).toList());
         });
+        // GUJRAJ23
         Timer(
             Duration(seconds: 1),
             () => Navigator.pushAndRemoveUntil(

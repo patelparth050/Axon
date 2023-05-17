@@ -227,22 +227,17 @@
 //   }
 // }
 
-import 'dart:convert';
 import 'dart:io';
-
 import 'package:axon/MyNavigationBar.dart';
 import 'package:axon/NewsDetails.dart';
 import 'package:axon/Settings.dart';
 import 'package:flutter/material.dart';
-
 import 'PaymentHistory.dart';
 import 'Providers/HttpClient.dart';
 import 'Utils/Loader.dart';
 import 'Utils/SharePreference.dart';
 import 'Utils/app_url.dart';
 import 'Widgets.dart/OverlayDialogWarning.dart';
-import 'api_service.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class News extends StatefulWidget {
@@ -255,8 +250,9 @@ class News extends StatefulWidget {
 class _NewsState extends State<News> {
   UserPreferences userPreference = UserPreferences();
   String token;
+  List doctorData;
   bool isLoading = false;
-  List newsData = List();
+  List newsData = [];
   int newsId;
   int selectedIndex = 0;
 
@@ -268,6 +264,18 @@ class _NewsState extends State<News> {
       });
       setState(() {
         _getCategory();
+      });
+    });
+    userPreference.getDoctor().then((value) {
+      setState(() {
+        doctorData = value;
+      });
+      setState(() {
+        print(
+            '00000000000000000000000000000000000000000000000000000000000000000000000000');
+        print(doctorData);
+        print(
+            '00000000000000000000000000000000000000000000000000000000000000000000000000');
       });
     });
     super.initState();
@@ -498,7 +506,7 @@ class _NewsState extends State<News> {
                   width: MediaQuery.of(context).size.width * 0.34,
                   child: Row(
                     children: [
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           whatsapp();
                         },
@@ -508,7 +516,7 @@ class _NewsState extends State<News> {
                           child: Image.asset('images/whatsapp.png'),
                         ),
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.push(
                               context,
@@ -521,7 +529,7 @@ class _NewsState extends State<News> {
                           child: Image.asset('images/rupee.png'),
                         ),
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.push(
                               context,
@@ -551,14 +559,14 @@ class _NewsState extends State<News> {
             context,
             PageRouteBuilder(
               pageBuilder: (a, b, c) => MyNavigationBar(selectedIndex),
-              transitionDuration: Duration(seconds: 2),
+              transitionDuration: Duration(seconds: 0),
             ),
             // MaterialPageRoute(
             //   builder: (context) => Events(),
             // ),
           );
-          // return Future.value(false);
-          await Future.delayed(Duration(seconds: 3));
+          return Future.value(false);
+          // await Future.delayed(Duration(seconds: 3));
         },
         child: Stack(
           children: <Widget>[
@@ -573,7 +581,7 @@ class _NewsState extends State<News> {
                     ),
                     ListView.builder(
                         padding: EdgeInsets.only(bottom: 10),
-                        physics: const AlwaysScrollableScrollPhysics(),
+                        physics: const ClampingScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: newsData.length,
                         itemBuilder: (BuildContext context, int itemIndex) {

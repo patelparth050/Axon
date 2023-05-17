@@ -32,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // ];
   String token;
   bool isLoading = false;
-  List doctorData = List();
+  List doctorData = [];
   int doctorId;
 
   // final _productSizesList = ["Dr. John Smith", "Dr. Demo Gynac"];

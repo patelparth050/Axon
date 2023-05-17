@@ -1,15 +1,15 @@
 import 'dart:io';
-
-import 'package:axon/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'MyNavigationBar.dart';
 import 'PaymentHistory.dart';
+import 'ReportDetails.dart';
 import 'Settings.dart';
+import 'Utils/SharePreference.dart';
+import 'Utils/app_url.dart';
 import 'Widgets.dart/OverlayDialogWarning.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'Providers/HttpClient.dart';
+import 'demo1.dart';
 
 class Reports extends StatefulWidget {
   const Reports({Key key}) : super(key: key);
@@ -22,6 +22,162 @@ class _ReportsState extends State<Reports> {
   int selectedIndex = 3;
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
+
+  UserPreferences userPreference = UserPreferences();
+  String token;
+  String mobile;
+  bool isLoading = false;
+  List reportData = [];
+  List customerData = [];
+
+  @override
+  void initState() {
+    userPreference.getMobile().then((value1) {
+      setState(() {
+        mobile = value1;
+      });
+    });
+    userPreference.getToken().then((value) {
+      setState(() {
+        token = value;
+      });
+      setState(() {
+        _getReportList();
+      });
+    });
+    // super.initState();
+    super.initState();
+  }
+
+  _getReportList() async {
+    print("Call GetCustomerTokenByAppCode method");
+    print('00000000000000000000000000000000000000000000');
+    print(mobile);
+    print('0000000000000000000000000000000000000000000');
+    FocusScope.of(context).unfocus(); // Used foe dismiss keyboard
+    setState(() {
+      isLoading = true;
+    });
+    var obj = {
+      "customerToken": token,
+      // "68cb311f-585a-4e86-8e89-06edf1814080": token,
+    };
+    print('>>>>>>>>>>');
+    print(obj);
+
+    final Future<Map<String, dynamic>> successfulMessage =
+        HttpClient().getReq(AppUrl.getrxvisithistory +
+            "?CustomerToken=" +
+            "2dda9fd0-55f7-11e9-9855-029527c1db28" +
+            // token.toString() +
+            "&Mobile=" +
+            "8140629967");
+    // 8140629967
+
+    await successfulMessage.then((response) {
+      print('>>>>>>>>>> Get Data <<<<<<<<');
+      print(response);
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (response['status'] == true) {
+        setState(() {
+          reportData = response['data'];
+        });
+        print(">>>>>>>>>>>>>>");
+        print(reportData);
+      } else {
+        showDialog(
+            context: context,
+            builder: (_) => OverlayDialogWarning(
+                message: response['message'].toString(),
+                showButton: true,
+                dialogType: DialogType.Warning));
+      }
+    });
+  }
+
+  createNewsListContainer(BuildContext context, int itemIndex) {
+    // final notificationObj = listOfColumns[itemIndex];
+    return Column(
+      children: [
+        InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ReportDetails(reportData[itemIndex])));
+          },
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Provider: ' + reportData[itemIndex]["providerName"],
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    'Member: ' + reportData[itemIndex]["patientName"],
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Updated on: ' + reportData[itemIndex]['visitDate'],
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => NewsDetails(
+                          //             token,
+                          //             newsData[itemIndex]['newsId'])));
+                        },
+                        child: Container(
+                          child: Icon(Icons.info_outline),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // SizedBox(
+        //   height: 20,
+        // ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     Navigator.push(context,
+        //         MaterialPageRoute(builder: (context) => SearchBarScreen()));
+        //   },
+        //   child: Text('aaaaa'),
+        // )
+      ],
+    );
+  }
 
   whatsapp() async {
     var contact = "+916353335967";
@@ -84,7 +240,7 @@ class _ReportsState extends State<Reports> {
                   width: MediaQuery.of(context).size.width * 0.34,
                   child: Row(
                     children: [
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           whatsapp();
                         },
@@ -94,7 +250,7 @@ class _ReportsState extends State<Reports> {
                           child: Image.asset('images/whatsapp.png'),
                         ),
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.push(
                               context,
@@ -107,7 +263,7 @@ class _ReportsState extends State<Reports> {
                           child: Image.asset('images/rupee.png'),
                         ),
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.push(
                               context,
@@ -149,142 +305,30 @@ class _ReportsState extends State<Reports> {
         child: Stack(
           children: [
             SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              child: Padding(
-                padding: EdgeInsets.all(15),
+                physics: const AlwaysScrollableScrollPhysics(),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 10,
+                      height: 3,
                     ),
-                    Center(
-                      child: Text(
-                        'Swipe down to refresh page',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Color(0XFF545454),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 120,
-                    ),
-                    Center(
-                      child: Image.asset(
-                        'images/axon.jpg',
-                        height: 90,
-                        width: 90,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Center(
-                      child: Text(
-                        'You  don\'t have any recent prescriptions',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Color(0XFF545454),
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
+                    ListView.builder(
+                        padding: EdgeInsets.only(bottom: 10),
+                        physics: const ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: reportData.length,
+                        itemBuilder: (BuildContext context, int itemIndex) {
+                          return createNewsListContainer(context, itemIndex);
+                        }),
                   ],
-                ),
-              ),
-            ),
+                )),
           ],
         ),
       ),
-
-      // Center(
-      //   child: ElevatedButton(
-      //     child: const Text('showModalBottomSheet'),
-      //     onPressed: () {
-      //       showModalBottomSheet<void>(
-      //         isScrollControlled: true,
-      //         context: context,
-      //         builder: (BuildContext context) {
-      //           return DialogStatefull();
-      //         },
-      //       );
-      //     },
-      //   ),
-      // ),
     );
   }
 }
 
-class DialogStatefull extends StatefulWidget {
-  const DialogStatefull({Key key}) : super(key: key);
 
-  @override
-  State<DialogStatefull> createState() => _DialogStatefullState();
-}
-
-class _DialogStatefullState extends State<DialogStatefull> {
-  int selected = 0;
-  String genderValue;
-
-  @override
-  Widget build(BuildContext context) {
-    return StatefulBuilder(builder: (context, state) {
-      return Container(
-        height: 660,
-        color: Colors.amber,
-        child: Center(
-          child: Column(
-            children: [
-              customRadio("helo", 0),
-              customRadio("helo", 1),
-              customRadio("helo", 2),
-              Radio(
-                value: 'Cunsultation',
-                activeColor: Color(0xFFFD5722),
-                groupValue: genderValue,
-                onChanged: (value) {
-                  setState(() {
-                    genderValue = value;
-                  });
-                },
-              ),
-            ],
-          ),
-        ),
-      );
-    });
-  }
-
-  Widget customRadio(String text, int index) {
-    return OutlinedButton(
-      onPressed: () {
-        setState(() {
-          selected = index;
-          print(index);
-          print(selected);
-        });
-      },
-      child: Text(
-        '',
-        style:
-            TextStyle(color: (selected == index) ? Colors.white : Colors.grey),
-      ),
-      style: OutlinedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        primary: Colors.white,
-        backgroundColor: (selected == index) ? Colors.deepOrange : Colors.white,
-      ),
-      // style: OutlinedButton.styleFrom(
-      //   primary: Colors.white,
-      //   backgroundColor: (selected == index) ? Colors.deepOrange : Colors.white,
-      // ),
-    );
-  }
-}
       // body: RefreshIndicator(
       //   color: Colors.black,
       //   backgroundColor: Colors.white,

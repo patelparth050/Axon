@@ -10,19 +10,29 @@ class VVGradientButton extends StatelessWidget {
   // ignore: non_constant_identifier_names
   final double width;
   final double height;
-  final Function onPressed;
+  final VoidCallback onPressed;
+  // final Function onPressed;
 
-  const VVGradientButton(
-      {Key key,
-      this.label,
-      this.fontSize,
-      this.fontWeight,
-      this.textColor,
-      this.width,
-      this.height,
-      this.onPressed})
-      : super(key: key);
-
+  // const VVGradientButton(
+  //     {Key key,
+  //     this.label,
+  //     this.fontSize,
+  //     this.fontWeight,
+  //     this.textColor,
+  //     this.width,
+  //     this.height,
+  //     this.onPressed})
+  //     : super(key: key);
+  const VVGradientButton({
+    Key key,
+    @required this.label,
+    this.fontSize,
+    this.fontWeight,
+    this.textColor,
+    this.width,
+    this.height,
+    this.onPressed,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(

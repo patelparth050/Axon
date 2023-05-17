@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:axon/Aaa.dart';
 import 'package:flutter/material.dart';
 
 import 'LoginPage.dart';
@@ -30,7 +29,7 @@ class _SplashState extends State<Splash> {
     Timer(Duration(seconds: 3), () async {
       // isLogin =
       // Check Login Status Here
-      isLogin = await userPreference.isLoggedIn();
+      isLogin = (await userPreference.isLoggedIn());
       print(isLogin);
       if (isLogin) {
         // is Logged In
