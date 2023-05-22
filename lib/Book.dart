@@ -41,6 +41,7 @@ class _BookState extends State<Book> {
   String displayBirthDate;
   String displayGender;
   String CaseNo = "";
+  String PatType = "";
   String displaytimingId;
   String selectedDocotrId;
   var appointmentData;
@@ -73,7 +74,7 @@ class _BookState extends State<Book> {
   }
 
   _getDoctorList() async {
-    print("Call GetCustomerTokenByAppCode method");
+    print("Call GetDoctorList By Token method");
     print('00000000000000000000000000000000000000000000');
     print(mobile);
     print('0000000000000000000000000000000000000000000');
@@ -115,14 +116,22 @@ class _BookState extends State<Book> {
       if (response['status'] == true) {
         setState(() {
           doctorData = response['data'];
-          _myJson = response['data'];
 
+          _myJson = response['data'];
+          print(_myJson);
+          selectedDocotrId = _myJson[0]['doctorId'].toString();
+          print(selectedDocotrId);
           doctorId = doctorData[0]['doctorId'];
           number = customerData[0]['customerContact'];
         });
         print(">>>>>>>>>>>>>>");
         print(doctorData);
         print(doctorId);
+        print(
+            'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
+        print(selectedDocotrId);
+        print(
+            'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT');
       } else {
         showDialog(
             context: context,
@@ -400,6 +409,7 @@ class _BookState extends State<Book> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
+                                    width: 80.w,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -410,12 +420,16 @@ class _BookState extends State<Book> {
                                           style: TextStyle(
                                               fontSize: 15,
                                               color: Colors.white),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
                                           customerData[0]['customerAddress'],
                                           style: TextStyle(
                                               fontSize: 15,
                                               color: Colors.white),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ],
                                     ),
@@ -469,8 +483,9 @@ class _BookState extends State<Book> {
                                           child: DropdownButton<String>(
                                             isDense: true,
                                             hint: Text(
-                                              "Select Doctor",
-                                              // _myJson[0]['doctorName'].toString(),
+                                              // "Select Doctor",
+                                              _myJson[0]['doctorName']
+                                                  .toString(),
                                               style: TextStyle(
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.w500,
@@ -644,10 +659,13 @@ class _BookState extends State<Book> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Container(
+                                          width: 77.w,
                                           padding: EdgeInsets.only(left: 10),
                                           child: Text(
                                             // 'Select Patient',
                                             displayPatientName,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.w500),
@@ -665,7 +683,7 @@ class _BookState extends State<Book> {
                                           topRight: Radius.circular(8),
                                           bottomRight: Radius.circular(8))),
                                   height: 110,
-                                  width: 63,
+                                  width: 16.w,
                                   child: Icon(
                                     Icons.person,
                                     color: Colors.white,
@@ -752,6 +770,7 @@ class _BookState extends State<Book> {
     print(result[1]);
     print(result[2]);
     print(result[3]);
+    print(result[4]);
 
     if (result != null) {
       setState(() {
@@ -759,6 +778,7 @@ class _BookState extends State<Book> {
         displayBirthDate = result[1];
         displayGender = result[2];
         CaseNo = result[3];
+        PatType = result[4];
       });
     }
   }

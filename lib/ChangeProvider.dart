@@ -26,8 +26,41 @@ class _ChangeProviderState extends State<ChangeProvider> {
   TextEditingController strAppcode = TextEditingController();
   int userid;
   int selectedIndex = 0;
-
+  List DoctorName = [];
   var data = [];
+  String statusCode;
+  List result = [];
+
+  @override
+  void initState() {
+    userPreference.getDoctor().then((value) {
+      if (value != null) {
+        // if (value.length > 0) {
+        print(value);
+        print('objectobjectobjectobjectobjectobject');
+        String finalStr = value.reduce((value, element) {
+          return value + element;
+        });
+        // for (var i = 0; i < value.length; i++) {
+        //   result.add(value[i]);
+        // }
+        setState(() {
+          DoctorName = [finalStr];
+        });
+        // }
+      }
+      setState(() {
+        print(
+            '00000000000000000000000000000000000000000000000000000000000000000000000000');
+        print(DoctorName);
+        print(
+            '00000000000000000000000000000000000000000000000000000000000000000000000000');
+      });
+    });
+    super.initState();
+    print('------------------------------------------------------');
+    print(DoctorName);
+  }
 
   Future _qrScanner() async {
     var camaraStatus = await Permission.camera.status;
@@ -76,13 +109,22 @@ class _ChangeProviderState extends State<ChangeProvider> {
           //  data = [response['data']['token']];
           // Map<String, dynamic> user = response['data']['token'];
           userPreference.setToken((response["data"]["token"]));
-          userPreference.setDoctor(([
-            response["data"]["token"].toString(),
-            strAppcode.text.toString()
-          ]
-              // response["data"]["token"].toString(),
-              // strAppcode.text.toString()
-              ).toList());
+          statusCode = strAppcode.text.toString();
+          // DoctorName.add(statusCode);
+          // DoctorName.add('parth');
+
+          print(
+              'DoctorNameDoctorNameDoctorNameDoctorNameDoctorNameDoctorNameDoctorNameDoctorName');
+          print(DoctorName);
+          print('DoctorNameDoctorNameDoctorNameDoctorNameDoctorNameDoctorName');
+          userPreference.setDoctor(([DoctorName.toString()]).toList());
+          // userPreference.setDoctor(([
+          //   response["data"]["token"].toString(),
+          //   strAppcode.text.toString()
+          // ]
+          //     // response["data"]["token"].toString(),
+          //     // strAppcode.text.toString()
+          //     ).toList());
         });
         // GUJRAJ23
         Timer(

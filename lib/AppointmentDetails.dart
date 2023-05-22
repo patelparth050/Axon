@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import 'Providers/HttpClient.dart';
 import 'Utils/SharePreference.dart';
@@ -183,6 +184,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
         Navigator.of(context)
           ..pop()
           ..pop();
+        status = 'canceled';
       },
     );
 
@@ -249,6 +251,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
         backgroundColor: Colors.white,
         strokeWidth: 2.0,
         onRefresh: () async {
+          print('object');
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
@@ -266,211 +269,216 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
             // ),
           );
 
-          // return Future.value(false);
-          await Future.delayed(Duration(seconds: 3));
+          return Future.value(false);
+          // await Future.delayed(Duration(seconds: 3));
         },
-        child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Padding(
-            padding: EdgeInsets.only(top: 8, left: 8, right: 8),
-            child: Column(
-              children: [
-                Card(
-                  // margin: EdgeInsets.all(3),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 400,
-                          height: 5,
-                        ),
-                        Text(
-                          'Your Appointment is booked for:',
-                          style: TextStyle(
-                            fontSize: 17,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Provider',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Text(
-                          doctorName,
-                          style: TextStyle(
-                            fontSize: 17,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Patient',
-                          style: TextStyle(fontSize: 15, color: Colors.grey),
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Text(
-                          patientName,
-                          style: TextStyle(
-                            fontSize: 17,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 400,
-                          height: 5,
-                        ),
-                        Text(
-                          'Remember to visit' + ' ' + doctorName,
-                          // + historyData['doctorName'],
-                          style: TextStyle(
-                            fontSize: 17,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Icon(Icons.perm_contact_calendar),
-                            Text(
-                              outputDate,
-                              // 'Wed 19-April-2023',
-                              style: TextStyle(
-                                fontSize: 19,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(Icons.punch_clock),
-                            Text(
-                              appointmentTime,
-                              style: TextStyle(
-                                fontSize: 19,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: EdgeInsets.only(top: 8, left: 8, right: 8),
+                child: Column(
+                  children: [
+                    Card(
+                      // margin: EdgeInsets.all(3),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.60,
+                              width: 400,
+                              height: 5,
                             ),
-                            TextButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "SAVE TO CALENDER",
-                                  style: TextStyle(
-                                    color: Color(0xFFFD5722),
-                                  ),
-                                ))
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: 400,
-                          // height: 10,
-                        ),
-                        Text(
-                          'Your Appointment Status:',
-                          style: TextStyle(
-                            fontSize: 17,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.72,
-                              child: Text(
-                                status,
-                                // 'aaaa',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Color(0xFFFD5722),
-                                ),
+                            Text(
+                              'Your Appointment is booked for:',
+                              style: TextStyle(
+                                fontSize: 17,
                               ),
                             ),
-                            // SizedBox(
-                            //   width: MediaQuery.of(context).size.width * 0.60,
-                            // ),
-                            TextButton(
-                              onPressed: () {
-                                showAlertDialog(context);
-                              },
-                              child: status == 'Booked'
-                                  ? Text(
-                                      'CANCEL',
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Provider',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Text(
+                              doctorName,
+                              style: TextStyle(
+                                fontSize: 17,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Patient',
+                              style:
+                                  TextStyle(fontSize: 15, color: Colors.grey),
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Text(
+                              patientName,
+                              style: TextStyle(
+                                fontSize: 17,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 400,
+                              height: 5,
+                            ),
+                            Text(
+                              'Remember to visit' + ' ' + doctorName,
+                              // + historyData['doctorName'],
+                              style: TextStyle(
+                                fontSize: 17,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Icon(Icons.perm_contact_calendar),
+                                Text(
+                                  outputDate,
+                                  // 'Wed 19-April-2023',
+                                  style: TextStyle(
+                                    fontSize: 19,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Icon(Icons.punch_clock),
+                                Text(
+                                  appointmentTime,
+                                  style: TextStyle(
+                                    fontSize: 19,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 52.w,
+                                ),
+                                TextButton(
+                                    onPressed: () {},
+                                    child: Text(
+                                      "SAVE TO CALENDER",
                                       style: TextStyle(
-                                        fontSize: 15,
                                         color: Color(0xFFFD5722),
                                       ),
-                                    )
-                                  : Container(),
+                                    ))
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 400,
+                              // height: 10,
+                            ),
+                            Text(
+                              'Your Appointment Status:',
+                              style: TextStyle(
+                                fontSize: 17,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 71.w,
+                                  child: Text(
+                                    status,
+                                    // 'aaaa',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Color(0xFFFD5722),
+                                    ),
+                                  ),
+                                ),
+                                // SizedBox(
+                                //   width: MediaQuery.of(context).size.width * 0.60,
+                                // ),
+                                TextButton(
+                                  onPressed: () {
+                                    showAlertDialog(context);
+                                  },
+                                  child: status == 'Booked'
+                                      ? Text(
+                                          'CANCEL',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Color(0xFFFD5722),
+                                          ),
+                                        )
+                                      : Container(),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      height: 40,
+                      width: 170,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFFFD5722),
+                        ),
+                        child: Text(
+                          'RETURN TO HOME',
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 40,
-                  width: 170,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xFFFD5722),
-                    ),
-                    child: Text(
-                      'RETURN TO HOME',
-                    ),
-                  ),
-                )
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

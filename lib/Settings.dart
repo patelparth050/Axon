@@ -322,7 +322,7 @@ class _SettingsState extends State<Settings> {
                                 // ),
                                 SizedBox(height: 5),
                                 Text(
-                                  mobile,
+                                  mobile.replaceRange(0, 7, 'xxxxxxx'),
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w500,

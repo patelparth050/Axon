@@ -50,9 +50,10 @@ class UserPreferences {
 
   void logoutProcess() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove("isLoggedIn");
-    prefs.remove("loginInfo");
-    prefs.remove("access_mobile");
-    prefs.remove("access_token");
+    // prefs.remove("isLoggedIn");
+    // prefs.remove("loginInfo");
+    // prefs.remove("access_mobile");
+    // prefs.remove("access_token");
+    prefs.remove("access_doctor");
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 import 'Providers/HttpClient.dart';
@@ -20,7 +21,11 @@ class _SelectPatientState extends State<SelectPatient> {
   String mobile;
   bool isLoading = false;
   String genderValue;
-  String CaseNo = "New";
+  String patientMobile;
+  String patientBirth;
+  String registeredpatientBirth;
+  String CaseNo = "";
+  String PatType;
   List patientData = [];
   List patientById = [];
   final formKey = GlobalKey<FormState>();
@@ -121,6 +126,33 @@ class _SelectPatientState extends State<SelectPatient> {
       if (response['status'] == true) {
         setState(() {
           patientById = response['data'];
+          patientMobile = patientById[0]['patient_mobile'];
+          patientBirth = patientById[0]['patient_dob'];
+          String date = patientById[0]['patient_dob'];
+          DateTime parseDate =
+              new DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date);
+          var inputDate = DateTime.parse(parseDate.toString());
+          var outputFormat = DateFormat('E d-MMMM-yyyy');
+          var outputFormat1 = DateFormat('E,yyyy');
+          var outputFormat2 = DateFormat('d MMM');
+          var outputFormat3 = DateFormat('hh:mm a');
+          var outputFormat4 = DateFormat('d-MM-yyyy');
+          // var outputFormat = DateFormat('MM/dd/yyyy hh:mm a');
+          var outputDate = outputFormat.format(inputDate);
+          var outputDate1 = outputFormat1.format(inputDate);
+          var outputDate2 = outputFormat2.format(inputDate);
+          var outputDate3 = outputFormat3.format(inputDate);
+          var outputDate4 = outputFormat4.format(inputDate);
+          patientBirth = outputDate4;
+          print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+          print(outputDate);
+          print(outputDate1);
+          print(outputDate2);
+          print(outputDate3);
+          print(outputDate4);
+          print(patientBirth);
+          print(
+              '|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
         });
         print(">>>>>>>>>>>>>>");
         print(patientById);
@@ -136,16 +168,47 @@ class _SelectPatientState extends State<SelectPatient> {
   }
 
   createPatientListContainer(BuildContext context, int itemIndex) {
+    // registeredpatientBirth = patientData[itemIndex]['patient_dob'];
+
+    String date = patientData[itemIndex]['patient_dob'];
+
+    DateTime parseDate = new DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date);
+    var inputDate = DateTime.parse(parseDate.toString());
+    var outputFormat = DateFormat('E d-MMMM-yyyy');
+    var outputFormat1 = DateFormat('E,yyyy');
+    var outputFormat2 = DateFormat('d MMM');
+    var outputFormat3 = DateFormat('hh:mm a');
+    var outputFormat4 = DateFormat('d-MM-yyyy');
+    var outputFormat5 = DateFormat('d-MMM-yyyy');
+    // var outputFormat = DateFormat('MM/dd/yyyy hh:mm a');
+    var outputDate = outputFormat.format(inputDate);
+    var outputDate1 = outputFormat1.format(inputDate);
+    var outputDate2 = outputFormat2.format(inputDate);
+    var outputDate3 = outputFormat3.format(inputDate);
+    var outputDate4 = outputFormat4.format(inputDate);
+    var outputDate5 = outputFormat5.format(inputDate);
+    registeredpatientBirth = outputDate5;
+    print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+    print(outputDate);
+    print(outputDate1);
+    print(outputDate2);
+    print(outputDate3);
+    print(outputDate4);
+    print(outputDate5);
+    // print(patientBirth);
+    print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
     // final notificationObj = listOfColumns[itemIndex];
     return Column(
       children: [
         InkWell(
           onTap: () {
-            //   Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (context) =>
-            //               ReportDetails(reportData[itemIndex])));
+            Navigator.pop(context, [
+              patientData[itemIndex]['patient_name'],
+              registeredpatientBirth,
+              patientData[itemIndex]['patient_gender'],
+              patientData[itemIndex]['case_no'].toString(),
+              PatType = "Old",
+            ]);
           },
           child: Card(
             child: Padding(
@@ -176,7 +239,7 @@ class _SelectPatientState extends State<SelectPatient> {
                         SizedBox(
                           height: 10,
                         ),
-                        Text(patientData[itemIndex]['patient_dob']),
+                        Text(registeredpatientBirth),
                       ],
                     ),
                   ),
@@ -192,69 +255,61 @@ class _SelectPatientState extends State<SelectPatient> {
     );
   }
 
-  createPatientByIdContainer(BuildContext context, int itemIndex) {
-    // final notificationObj = listOfColumns[itemIndex];
-    return Column(
-      children: [
-        InkWell(
-          onTap: () {
-            //   Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (context) =>
-            //               ReportDetails(reportData[itemIndex])));
-          },
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Container(
-                    width: 25.w,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(patientById[itemIndex]['case_no'].toString()),
-                        Container(
-                          child: Icon(Icons.person),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(patientById[itemIndex]['patient_name']),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(patientById[itemIndex]['patient_mobile']),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(patientById[itemIndex]['patient_dob']),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        // SizedBox(
-        //   height: 20,
-        // ),
-      ],
-    );
-  }
-
-  List _foundUsers = [];
-
-  // @override
-  // initState() {
-  //   _foundUsers = _allUsers;
-  //   super.initState();
+  // createPatientByIdContainer(BuildContext context, int itemIndex) {
+  //   // final notificationObj = listOfColumns[itemIndex];
+  //   return Column(
+  //     children: [
+  //       InkWell(
+  //         onTap: () {
+  //           //   Navigator.push(
+  //           //       context,
+  //           //       MaterialPageRoute(
+  //           //           builder: (context) =>
+  //           //               ReportDetails(reportData[itemIndex])));
+  //         },
+  //         child: Card(
+  //           child: Padding(
+  //             padding: const EdgeInsets.all(8.0),
+  //             child: Row(
+  //               children: [
+  //                 Container(
+  //                   width: 25.w,
+  //                   child: Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.center,
+  //                     children: [
+  //                       Text(patientById[itemIndex]['case_no'].toString()),
+  //                       Container(
+  //                         child: Icon(Icons.person),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //                 Container(
+  //                   child: Column(
+  //                     crossAxisAlignment: CrossAxisAlignment.start,
+  //                     children: [
+  //                       Text(patientById[itemIndex]['patient_name']),
+  //                       SizedBox(
+  //                         height: 10,
+  //                       ),
+  //                       Text(patientById[itemIndex]['patient_mobile']),
+  //                       SizedBox(
+  //                         height: 10,
+  //                       ),
+  //                       Text(patientById[itemIndex]['patient_dob']),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //       // SizedBox(
+  //       //   height: 20,
+  //       // ),
+  //     ],
+  //   );
   // }
 
   @override
@@ -469,6 +524,7 @@ class _SelectPatientState extends State<SelectPatient> {
                                                 strBirthDate.text,
                                                 genderValue,
                                                 CaseNo,
+                                                PatType = "New",
                                               ])
                                           : null,
                                       child: Text(
@@ -549,11 +605,13 @@ class _SelectPatientState extends State<SelectPatient> {
                           child: patientById.isNotEmpty
                               ? InkWell(
                                   onTap: () {
-                                    //   Navigator.push(
-                                    //       context,
-                                    //       MaterialPageRoute(
-                                    //           builder: (context) =>
-                                    //               ReportDetails(reportData[itemIndex])));
+                                    Navigator.pop(context, [
+                                      patientById[0]['patient_name'],
+                                      patientBirth,
+                                      patientById[0]['patient_gender'],
+                                      patientById[0]['case_no'].toString(),
+                                      PatType = "Old",
+                                    ]);
                                   },
                                   child: Card(
                                     child: Padding(
@@ -584,13 +642,15 @@ class _SelectPatientState extends State<SelectPatient> {
                                                 SizedBox(
                                                   height: 10,
                                                 ),
-                                                Text(patientById[0]
-                                                    ['patient_mobile']),
+                                                Text(patientMobile.replaceRange(
+                                                    0, 10, 'xxxxxxxxxx')),
                                                 SizedBox(
                                                   height: 10,
                                                 ),
-                                                Text(patientById[0]
-                                                    ['patient_dob']),
+                                                Text(patientBirth
+                                                    // .replaceRange(
+                                                    //     0, 10, 'xx-xx-xxxx')
+                                                    ),
                                               ],
                                             ),
                                           ),

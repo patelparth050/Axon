@@ -232,6 +232,8 @@ import 'package:axon/MyNavigationBar.dart';
 import 'package:axon/NewsDetails.dart';
 import 'package:axon/Settings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:intl/intl.dart';
 import 'PaymentHistory.dart';
 import 'Providers/HttpClient.dart';
 import 'Utils/Loader.dart';
@@ -250,6 +252,7 @@ class News extends StatefulWidget {
 class _NewsState extends State<News> {
   UserPreferences userPreference = UserPreferences();
   String token;
+  String newsdate;
   List doctorData;
   bool isLoading = false;
   List newsData = [];
@@ -266,18 +269,18 @@ class _NewsState extends State<News> {
         _getCategory();
       });
     });
-    userPreference.getDoctor().then((value) {
-      setState(() {
-        doctorData = value;
-      });
-      setState(() {
-        print(
-            '00000000000000000000000000000000000000000000000000000000000000000000000000');
-        print(doctorData);
-        print(
-            '00000000000000000000000000000000000000000000000000000000000000000000000000');
-      });
-    });
+    // userPreference.getDoctor().then((value) {
+    //   setState(() {
+    //     doctorData = value;
+    //   });
+    //   setState(() {
+    //     print(
+    //         '00000000000000000000000000000000000000000000000000000000000000000000000000');
+    //     print(doctorData);
+    //     print(
+    //         '00000000000000000000000000000000000000000000000000000000000000000000000000');
+    //   });
+    // });
     super.initState();
     print('------------------------------------------------------');
     print(token);
@@ -327,6 +330,38 @@ class _NewsState extends State<News> {
 
   createNewsListContainer(BuildContext context, int itemIndex) {
     // final notificationObj = listOfColumns[itemIndex];
+
+    String parsedstring3 =
+        Bidi.stripHtmlIfNeeded(newsData[itemIndex]["description"]);
+    print(parsedstring3);
+
+    String date = newsData[itemIndex]['displayDate'];
+
+    DateTime parseDate = new DateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(date);
+    var inputDate = DateTime.parse(parseDate.toString());
+    var outputFormat = DateFormat('E d-MMMM-yyyy');
+    var outputFormat1 = DateFormat('E,yyyy');
+    var outputFormat2 = DateFormat('d MMM');
+    var outputFormat3 = DateFormat('hh:mm a');
+    var outputFormat4 = DateFormat('d-MM-yyyy');
+    var outputFormat5 = DateFormat('d-MMM-yyyy,hh:mm a');
+    // var outputFormat = DateFormat('MM/dd/yyyy hh:mm a');
+    var outputDate = outputFormat.format(inputDate);
+    var outputDate1 = outputFormat1.format(inputDate);
+    var outputDate2 = outputFormat2.format(inputDate);
+    var outputDate3 = outputFormat3.format(inputDate);
+    var outputDate4 = outputFormat4.format(inputDate);
+    var outputDate5 = outputFormat5.format(inputDate);
+    newsdate = outputDate5;
+    print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
+    print(outputDate);
+    print(outputDate1);
+    print(outputDate2);
+    print(outputDate3);
+    print(outputDate4);
+    print(outputDate5);
+    // print(patientBirth);
+    print('|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||');
     return Column(
       children: [
         InkWell(
@@ -384,9 +419,10 @@ class _NewsState extends State<News> {
                           // width: 270,
                           // child: Html(
                           //   data: newsData[itemIndex]["description"],
+                          //   // shrinkWrap: ,
                           // ),
                           child: Text(
-                            newsData[itemIndex]["description"],
+                            parsedstring3,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
@@ -405,7 +441,7 @@ class _NewsState extends State<News> {
                                 width: MediaQuery.of(context).size.width * 0.67,
                                 // width: 170,
                                 child: Text(
-                                  newsData[itemIndex]['displayDate'],
+                                  newsdate,
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500),

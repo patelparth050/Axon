@@ -2,10 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:printing/printing.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'PaymentHistory.dart';
 import 'Settings.dart';
 import 'Widgets.dart/OverlayDialogWarning.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 
 class ReportDetails extends StatefulWidget {
   var reportData;
@@ -20,6 +24,42 @@ class _ReportDetailsState extends State<ReportDetails> {
   var reportData;
   _ReportDetailsState(this.reportData);
   bool isLoading = false;
+
+  // Future<void> printDoc() async {
+  //   final image = await imageFromAssetBundle(
+  //     "assets/Images/image.png",
+  //   );
+  //   final doc = pw.Document();
+  //   doc.addPage(pw.Page(
+  //       pageFormat: PdfPageFormat.a4,
+  //       build: (pw.Context context) {
+  //         return buildPrintableData(image);
+  //       }));
+  //   await Printing.layoutPdf(
+  //       onLayout: (PdfPageFormat format) async => doc.save());
+  // }
+
+  Future<void> printDoc1() async {
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => await Printing.convertHtml(
+              format: format,
+              html: reportData['treatment'],
+            ));
+  }
+
+  Future<void> printDoc2() async {
+    final doc = pw.Document();
+
+    doc.addPage(pw.Page(
+        pageFormat: PdfPageFormat.a4,
+        build: (pw.Context context) {
+          return pw.Center(
+            child: pw.Text('Hello World'),
+          ); // Center
+        }));
+    await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => doc.save());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +97,16 @@ class _ReportDetailsState extends State<ReportDetails> {
                     color: Colors.black,
                     // fontWeight: FontWeight.bold,
                     fontSize: 22,
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    printDoc1();
+                  },
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(8, 8, 0, 8),
+                    height: 27,
+                    child: Image.asset('images/settings.png'),
                   ),
                 ),
               ],

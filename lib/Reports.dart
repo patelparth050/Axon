@@ -5,6 +5,7 @@ import 'MyNavigationBar.dart';
 import 'PaymentHistory.dart';
 import 'ReportDetails.dart';
 import 'Settings.dart';
+import 'Utils/Loader.dart';
 import 'Utils/SharePreference.dart';
 import 'Utils/app_url.dart';
 import 'Widgets.dart/OverlayDialogWarning.dart';
@@ -321,6 +322,7 @@ class _ReportsState extends State<Reports> {
                         }),
                   ],
                 )),
+            isLoading ? Loader() : Container(),
           ],
         ),
       ),
