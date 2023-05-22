@@ -253,10 +253,10 @@ class _ReportsState extends State<Reports> {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PaymentHistory()));
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => PaymentHistory()));
                         },
                         child: Container(
                           margin: EdgeInsets.all(8),
