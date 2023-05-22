@@ -695,36 +695,43 @@ class _BookState extends State<Book> {
                           ),
                         ),
                         Container(
+                          height: 7.h,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  _bookAppointment();
-                                },
-                                child: Text(
-                                  'BOOK APPOINTMENT',
+                              Container(
+                                height: 5.h,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    _bookAppointment();
+                                  },
+                                  child: Text(
+                                    'BOOK APPOINTMENT',
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Color(0xFFFD5722)),
                                 ),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xFFFD5722)),
                               ),
                               SizedBox(
                                 width: 10,
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    displayDate = 'Select Appointment Date';
-                                    displayTimeSlot = '';
-                                    displaytimingId = '';
-                                    displayPatientName = 'Select Patient';
-                                    displayBirthDate = '';
-                                    displayGender = '';
-                                  });
-                                },
-                                child: Text('RESET'),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor: Color(0xFFFD5722)),
+                              Container(
+                                height: 5.h,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      displayDate = 'Select Appointment Date';
+                                      displayTimeSlot = '';
+                                      displaytimingId = '';
+                                      displayPatientName = 'Select Patient';
+                                      displayBirthDate = '';
+                                      displayGender = '';
+                                    });
+                                  },
+                                  child: Text('RESET'),
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Color(0xFFFD5722)),
+                                ),
                               ),
                             ],
                           ),

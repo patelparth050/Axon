@@ -269,7 +269,7 @@ class _ReportsState extends State<Reports> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Settings()));
+                                  builder: (context) => MyHomePage()));
                         },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(8, 8, 0, 8),
