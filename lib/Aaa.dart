@@ -79,17 +79,13 @@
 //   }
 // }
 
-import 'dart:async';
 
-import 'package:another_flushbar/flushbar.dart';
-import 'package:axon/ChangeProvider.dart';
 import 'package:axon/Utils/Loader.dart';
-import 'package:axon/Utils/app_url.dart';
-import 'package:axon/Widgets.dart/OverlayDialogWarning.dart';
+
 import 'package:flutter/material.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
-import 'Providers/HttpClient.dart';
+
 
 class VerifyOTPScreen1 extends StatefulWidget {
   String MobileNumber;

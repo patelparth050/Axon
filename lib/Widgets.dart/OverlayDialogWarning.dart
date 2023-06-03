@@ -106,7 +106,7 @@ class OverlayDialogWarningState extends State<OverlayDialogWarning>
                               color: Colors.green,
                               size: 40,
                             )
-                          : Image.asset('images/axon.jpg', fit: BoxFit.cover)),
+                          : Image.asset('images/axon.png', fit: BoxFit.cover)),
                   Padding(
                     padding: EdgeInsets.all(15),
                     child: Text(

@@ -204,7 +204,7 @@ class _ChangeProviderState extends State<ChangeProvider> {
                         children: [
                           Container(
                             height: 100,
-                            child: Image(image: AssetImage('images/axon.jpg')),
+                            child: Image(image: AssetImage('images/axon.png')),
                           ),
                           SizedBox(height: 10),
                           Container(
@@ -228,7 +228,7 @@ class _ChangeProviderState extends State<ChangeProvider> {
                                 Container(
                                   height: 40,
                                   child: Image(
-                                      image: AssetImage('images/axon.jpg')),
+                                      image: AssetImage('images/axon.png')),
                                 ),
                                 SizedBox(width: 10),
                                 Container(
@@ -306,7 +306,7 @@ class _ChangeProviderState extends State<ChangeProvider> {
                                 Container(
                                   height: 40,
                                   child: Image(
-                                      image: AssetImage('images/axon.jpg')),
+                                      image: AssetImage('images/axon.png')),
                                 ),
                                 SizedBox(width: 10),
                                 Container(

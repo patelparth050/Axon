@@ -394,6 +394,9 @@ class _BookState extends State<Book> {
                                 image: MemoryImage(
                                   base64Decode(customerData[0]['logoImageURL']),
                                 ),
+                                onError: (exception, stackTrace) {
+                                  return Icon(Icons.error);
+                                },
                                 // image: NetworkImage(
                                 //   customerData[0]['logoImageURL'],
                                 // ),

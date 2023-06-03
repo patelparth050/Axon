@@ -378,7 +378,7 @@ class _ReportsState extends State<Reports> {
       //               ),
       //               Center(
       //                 child: Image.asset(
-      //                   'images/axon.jpg',
+      //                   'images/axon.png',
       //                   height: 90,
       //                   width: 90,
       //                 ),

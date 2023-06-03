@@ -56,7 +56,7 @@ class _SplashState extends State<Splash> {
             //   color: Colors.white,
             //   image: DecorationImage(
             //       image: AssetImage(
-            //         "images/axon.jpg",
+            //         "images/axon.png",
             //       ),
             //       fit: BoxFit.cover),
             // )

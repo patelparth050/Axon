@@ -472,7 +472,7 @@ class _EventsState extends State<Events> {
                                   ),
                                   Center(
                                     child: Image.asset(
-                                      'images/axon.jpg',
+                                      'images/axon.png',
                                       height: 90,
                                       width: 90,
                                     ),
@@ -535,7 +535,7 @@ class _EventsState extends State<Events> {
 //                     ),
 //                     Center(
 //                       child: Image.asset(
-//                         'images/axon.jpg',
+//                         'images/axon.png',
 //                         height: 90,
 //                         width: 90,
 //                       ),
