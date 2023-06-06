@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import 'ChangeProvider.dart';
+import 'LoginPage.dart';
 import 'Utils/colors_util.dart';
 
 void main() {
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: AppPrimaryColor,
         ),
-        home: ChangeProvider(),
+        home: LoginPageScreen(),
         // Calendar(),
       );
     });
