@@ -274,6 +274,8 @@
 //         ));
 //   }
 // }
+import 'dart:async';
+
 import 'package:axon/Utils/app_url.dart';
 import 'package:flutter/material.dart';
 
@@ -378,6 +380,9 @@ class _SelectAppointmentDateState extends State<SelectAppointmentDate> {
     });
 
     super.initState();
+    indicatorValue = DateTime.now().second / 60;
+
+    updateSeconds();
   }
 
   _getCategory() async {
@@ -682,6 +687,27 @@ class _SelectAppointmentDateState extends State<SelectAppointmentDate> {
     );
   }
 
+  double indicatorValue;
+  Timer timer;
+
+  String timee() {
+    return "${DateTime.now().hour < 10 ? "0${DateTime.now().hour}" : DateTime.now().hour} : ${DateTime.now().minute < 10 ? "0${DateTime.now().minute}" : DateTime.now().minute} : ${DateTime.now().second < 10 ? "0${DateTime.now().second}" : DateTime.now().second} ";
+  }
+
+  updateSeconds() {
+    timer = Timer.periodic(
+        Duration(seconds: 1),
+        (Timer timer) => setState(() {
+              indicatorValue = DateTime.now().second / 60;
+            }));
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -712,7 +738,8 @@ class _SelectAppointmentDateState extends State<SelectAppointmentDate> {
               ),
               //Text Widget to Show Current Date
               Text(
-                '$time',
+                timee(),
+                // '$time',
                 style: TextStyle(color: Colors.black, fontSize: 15),
               ),
 

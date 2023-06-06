@@ -1,7 +1,9 @@
-import 'package:axon/Utils/Loader.dart';
-import 'package:axon/Utils/app_url.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+
+import 'package:axon/Utils/Loader.dart';
+import 'package:axon/Utils/app_url.dart';
 
 import 'Providers/HttpClient.dart';
 import 'Widgets.dart/OverlayDialogWarning.dart';

@@ -267,17 +267,19 @@ class _EventsState extends State<Events> {
                               ),
                               InkWell(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              AppointmentDetails(
-                                                  outputDate,
-                                                  doctorName,
-                                                  outputDate3,
-                                                  patientName,
-                                                  status,
-                                                  appointmentId)));
+                                  status == 'Booked'
+                                      ? Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AppointmentDetails(
+                                                      outputDate,
+                                                      doctorName,
+                                                      outputDate3,
+                                                      patientName,
+                                                      status,
+                                                      appointmentId)))
+                                      : null;
                                 },
                                 child: Icon(Icons.info_outline),
                               ),
@@ -470,7 +472,7 @@ class _EventsState extends State<Events> {
                                   ),
                                   Center(
                                     child: Image.asset(
-                                      'images/axon.jpg',
+                                      'images/axon.png',
                                       height: 90,
                                       width: 90,
                                     ),
@@ -533,7 +535,7 @@ class _EventsState extends State<Events> {
 //                     ),
 //                     Center(
 //                       child: Image.asset(
-//                         'images/axon.jpg',
+//                         'images/axon.png',
 //                         height: 90,
 //                         width: 90,
 //                       ),

@@ -269,7 +269,7 @@ class _ReportsState extends State<Reports> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Settings()));
+                                  builder: (context) => MyHomePage()));
                         },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(8, 8, 0, 8),
@@ -378,7 +378,7 @@ class _ReportsState extends State<Reports> {
       //               ),
       //               Center(
       //                 child: Image.asset(
-      //                   'images/axon.jpg',
+      //                   'images/axon.png',
       //                   height: 90,
       //                   width: 90,
       //                 ),

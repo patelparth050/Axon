@@ -91,7 +91,7 @@
 //                   Container(
 //                     height: 200,
 //                     child: Image.asset(
-//                       'images/axon.jpg',
+//                       'images/axon.png',
 //                     ),
 //                   ),
 //                   Card(
@@ -441,7 +441,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                   Container(
                     height: 200,
                     child: Image.asset(
-                      'images/axon.jpg',
+                      'images/axon.png',
                     ),
                   ),
                   SizedBox(height: 30),

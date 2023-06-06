@@ -471,34 +471,34 @@
 // //         timeInSecForIosWeb: 4);
 // //   }
 
-// //   @override
-// //   void initState() {
-// //     // TODO: implement initState
-// //     super.initState();
-// //     _razorpay = Razorpay();
-// //     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-// //     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-// //     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-// //   }
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //   _razorpay = Razorpay();
+  //   _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+  //   _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+  //   _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  // }
 
-// //   void makePayment() async {
-// //     var options = {
-// //       'key': 'rzp_test_NyShBXSTj3KSXP',
-// //       'amount': (int.parse(strAmount.text) * 100).toString(), // Rs 200
-// //       'name': "Parth",
-// //       'description': genderValue,
-// //       'prefill': {
-// //         'contact': "+91123456789",
-// //         'email': (strEmail.text).toString(),
-// //       }
-// //     };
+  // void makePayment() async {
+  //   var options = {
+  //     'key': 'rzp_test_NyShBXSTj3KSXP',
+  //     'amount': (int.parse(strAmount.text) * 100).toString(), // Rs 200
+  //     'name': "Parth",
+  //     'description': genderValue,
+  //     'prefill': {
+  //       'contact': "+91123456789",
+  //       'email': (strEmail.text).toString(),
+  //     }
+  //   };
 
-// //     try {
-// //       _razorpay.open(options);
-// //     } catch (e) {
-// //       debugPrint(e.toString());
-// //     }
-// //   }
+  //   try {
+  //     _razorpay.open(options);
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //   }
+  // }
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -809,7 +809,7 @@
 // //                   ),
 // //                   Center(
 // //                     child: Image.asset(
-// //                       'images/axon.jpg',
+// //                       'images/axon.png',
 // //                       height: 90,
 // //                       width: 90,
 // //                     ),
